@@ -1,0 +1,62 @@
+# Gradle
+.gradle/
+build/
+/captures
+.externalNativeBuild
+.cxx
+.kotlin/
+
+# Local configuration
+local.properties
+
+# IDE (Android Studio / IntelliJ / VS Code / Fleet)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.vscode/
+.fleet/
+
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# Java class files
+*.class
+
+# Signing
+*.jks
+*.keystore
+keystore.properties
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+secrets.properties
+google-services.json
+GoogleService-Info.plist
+
+# Logs and crash reports
+*.log
+hs_err_pid*
+replay_pid*
+
+# Profiling / heap dumps
+*.hprof
+
+# Lint / test reports
+lint-results*.html
+lint-results*.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local docs
+local-docs/
