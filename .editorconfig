@@ -15,3 +15,7 @@ ktlint_function_naming_ignore_when_annotated_with = Composable
 
 [*.{xml,toml,yml,yaml,json}]
 indent_size = 4
+
+# Holds every navigation route; grows beyond one declaration.
+[**/navigation/EchnoRoutes.kt]
+ktlint_standard_filename = disabled
