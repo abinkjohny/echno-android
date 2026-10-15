@@ -1,4 +1,4 @@
-package com.fereydon.echno.ui.theme
+package org.echno.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

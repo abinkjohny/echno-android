@@ -1,4 +1,4 @@
-package com.fereydon.echno.ui.theme
+package org.echno.ui.theme
 
 import android.app.Activity
 import android.os.Build

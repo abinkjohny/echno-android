@@ -1,4 +1,4 @@
-package com.fereydon.echno
+package org.echno
 
 import org.junit.Test
 

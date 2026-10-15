@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.fereydon.echno"
+    namespace = "org.echno"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.fereydon.echno"
+        applicationId = "org.echno"
         minSdk = 28
         targetSdk = 37
         versionCode = 1
