@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit review settings. Anything not listed uses CodeRabbit's defaults.
+reviews:
+  pre_merge_checks:
+    docstrings:
+      # Compose UI is many small, self-describing functions; a coverage percentage
+      # would push filler comments. Document non-obvious code instead.
+      mode: "off"
