@@ -20,6 +20,10 @@ val localProperties =
 
 fun local(key: String, default: String): String = localProperties.getProperty(key, default)
 
+// A local.properties value as a Java string literal for buildConfigField. Backslashes are
+// escaped before quotes so a stray `"` or `\` cannot break the generated BuildConfig.java.
+fun localJavaString(key: String, default: String): String = "\"" + local(key, default).replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+
 android {
     namespace = "org.echno"
     compileSdk {
@@ -47,11 +51,11 @@ android {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             // 10.0.2.2 is how the Android emulator reaches localhost on your computer.
-            buildConfigField("String", "API_BASE_URL", "\"${local("echno.dev.apiBaseUrl", "http://10.0.2.2:8080/")}\"")
+            buildConfigField("String", "API_BASE_URL", localJavaString("echno.dev.apiBaseUrl", "http://10.0.2.2:8080/"))
             buildConfigField(
                 "String",
                 "AUTH_ISSUER",
-                "\"${local("echno.dev.authIssuer", "http://10.0.2.2:8180/realms/echno-realm")}\""
+                localJavaString("echno.dev.authIssuer", "http://10.0.2.2:8180/realms/echno-realm")
             )
         }
         create("staging") {
@@ -59,11 +63,11 @@ android {
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
             // TODO: set real staging URLs.
-            buildConfigField("String", "API_BASE_URL", "\"${local("echno.staging.apiBaseUrl", "https://staging.echno.invalid/")}\"")
+            buildConfigField("String", "API_BASE_URL", localJavaString("echno.staging.apiBaseUrl", "https://staging.echno.invalid/"))
             buildConfigField(
                 "String",
                 "AUTH_ISSUER",
-                "\"${local("echno.staging.authIssuer", "https://staging-auth.echno.invalid/realms/echno-realm")}\""
+                localJavaString("echno.staging.authIssuer", "https://staging-auth.echno.invalid/realms/echno-realm")
             )
         }
         create("prod") {
