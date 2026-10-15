@@ -3,4 +3,8 @@
 
     <!-- Common actions -->
     <string name="action_retry">Retry</string>
+
+    <!-- Home (placeholder until Phase 4) -->
+    <string name="home_placeholder_title">Welcome to Echno</string>
+    <string name="home_placeholder_message">Environment: %1$s\nAPI: %2$s</string>
 </resources>
