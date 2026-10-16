@@ -8,6 +8,18 @@
     <!-- Common actions -->
     <string name="action_retry">Retry</string>
 
+    <!-- Errors (core/ui/AppErrorMessage.kt) -->
+    <string name="error_network">Can\'t reach Echno. Check your internet connection.</string>
+    <string name="error_timeout">The server took too long to answer. Try again.</string>
+    <string name="error_unauthorized">Your session has ended. Sign in again.</string>
+    <string name="error_forbidden">You don\'t have access to this.</string>
+    <string name="error_not_found">This item no longer exists.</string>
+    <string name="error_validation">The request was rejected. Check the details and try again.</string>
+    <string name="error_conflict">This was changed by someone else. Refresh and try again.</string>
+    <string name="error_rate_limited">Too many requests. Wait a moment and try again.</string>
+    <string name="error_server">Something went wrong on the server. Try again later.</string>
+    <string name="error_unknown">Something went wrong. Try again.</string>
+
     <!-- Home (placeholder until Phase 4) -->
     <string name="home_placeholder_title">Welcome to Echno</string>
     <string name="home_placeholder_message">Environment: %1$s\nAPI: %2$s</string>
