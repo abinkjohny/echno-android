@@ -26,6 +26,10 @@ suspend fun <T> safeApiCall(call: suspend () -> T): ApiResult<T> = try {
     ApiResult.Failure(AppError.Network)
 } catch (e: SerializationException) {
     ApiResult.Failure(AppError.Unknown(e))
+} catch (e: Exception) {
+    // Anything else, e.g. Retrofit's KotlinNullPointerException when a 204 answers a method
+    // declared to return a body (declare such endpoints as returning Unit instead).
+    ApiResult.Failure(AppError.Unknown(e))
 }
 
 /** Maps a non-2xx response to an [AppError], using the backend's ProblemDetail body when present. */
