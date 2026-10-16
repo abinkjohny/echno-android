@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Echno" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Window theme. Compose draws everything; this only sets what shows before it does. -->
+    <style name="Theme.Echno" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/splash_background</item>
+    </style>
+
+    <!-- Shown by the system while the app starts (Android 12+, back-ported by core-splashscreen):
+         a plain colour matching the artwork, then MainActivity switches to Theme.Echno. -->
+    <style name="Theme.Echno.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon_blank</item>
+        <item name="postSplashScreenTheme">@style/Theme.Echno</item>
+    </style>
 </resources>
