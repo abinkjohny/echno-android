@@ -63,18 +63,20 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
-            // TODO: set real staging URLs.
-            buildConfigField("String", "API_BASE_URL", localJavaString("echno.staging.apiBaseUrl", "https://staging.echno.invalid/"))
+            // IITM staging deployment.
+            buildConfigField("String", "API_BASE_URL", localJavaString("echno.staging.apiBaseUrl", "https://backend.echno.in/"))
             buildConfigField(
                 "String",
                 "AUTH_ISSUER",
-                localJavaString("echno.staging.authIssuer", "https://staging-auth.echno.invalid/realms/echno-realm")
+                localJavaString("echno.staging.authIssuer", "https://auth.echno.in/realms/echno-realm")
             )
         }
         create("prod") {
             dimension = "environment"
-            buildConfigField("String", "API_BASE_URL", "\"https://backend.echno.xyz/\"")
-            buildConfigField("String", "AUTH_ISSUER", "\"https://auth.echno.in/realms/echno-realm\"")
+            // TODO: no production deployment exists yet. The .invalid domain can never resolve,
+            // so a prod build cannot silently talk to staging. Set the real URLs before release.
+            buildConfigField("String", "API_BASE_URL", "\"https://backend.echno.invalid/\"")
+            buildConfigField("String", "AUTH_ISSUER", "\"https://auth.echno.invalid/realms/echno-realm\"")
         }
     }
 
