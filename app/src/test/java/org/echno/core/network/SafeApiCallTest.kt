@@ -149,6 +149,16 @@ class SafeApiCallTest {
     }
 
     @Test
+    fun `204 for a method that expects a body is Unknown, not a crash`() = runTest {
+        // Retrofit skips the converter on 204 and throws KotlinNullPointerException for a non-null return type.
+        respond(204)
+
+        val result = safeApiCall { api.items() }
+
+        assertTrue(result is ApiResult.Failure && result.error is AppError.Unknown)
+    }
+
+    @Test
     fun `unparseable success body is Unknown`() = runTest {
         respond(200, """{"unexpected":"shape"}""")
 
