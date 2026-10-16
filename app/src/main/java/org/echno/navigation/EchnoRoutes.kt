@@ -8,4 +8,7 @@ import kotlinx.serialization.Serializable
 // @Serializable lets the back stack survive process death and rotation.
 
 @Serializable
+data object Splash : NavKey
+
+@Serializable
 data object Home : NavKey
