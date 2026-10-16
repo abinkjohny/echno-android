@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +29,7 @@ import org.echno.R
 import org.echno.core.designsystem.theme.EchnoTheme
 import org.echno.core.designsystem.theme.SplashTaglineDark
 import org.echno.core.designsystem.theme.SplashTaglineLight
+import org.echno.core.designsystem.theme.TaglineTextStyle
 
 /** How long the branded splash stays up. Phase 3 replaces the fixed wait with the session check. */
 private const val SPLASH_DURATION_MS = 2_500L
@@ -78,7 +78,7 @@ private fun SplashContent(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.splash_tagline),
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.titleMedium,
+                style = TaglineTextStyle,
                 color = taglineColor,
                 textAlign = TextAlign.Center
             )
