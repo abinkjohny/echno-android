@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">Echno</string>
 
+    <!-- Splash -->
+    <string name="splash_tagline">Where Construction Meets Intelligent Management</string>
+    <string name="splash_logo_description">Echno</string>
+
     <!-- Common actions -->
     <string name="action_retry">Retry</string>
 

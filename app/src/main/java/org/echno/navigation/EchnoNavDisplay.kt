@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.echno.feature.home.ui.HomeScreen
+import org.echno.feature.splash.ui.SplashScreen
 
 /**
  * App navigation host. The back stack is a plain list we own: push a route with
@@ -16,7 +17,7 @@ import org.echno.feature.home.ui.HomeScreen
  */
 @Composable
 fun EchnoNavDisplay(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(Home)
+    val backStack = rememberNavBackStack(Splash)
 
     NavDisplay(
         backStack = backStack,
@@ -31,6 +32,16 @@ fun EchnoNavDisplay(modifier: Modifier = Modifier) {
         ),
         entryProvider =
         entryProvider {
+            entry<Splash> {
+                SplashScreen(
+                    onFinished = {
+                        // Replace rather than push, so Back from Home leaves the app instead of
+                        // returning to the splash.
+                        backStack.clear()
+                        backStack.add(Home)
+                    }
+                )
+            }
             entry<Home> { HomeScreen() }
         }
     )
