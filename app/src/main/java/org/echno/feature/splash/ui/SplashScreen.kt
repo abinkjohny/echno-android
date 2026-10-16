@@ -32,7 +32,7 @@ import org.echno.core.designsystem.theme.SplashTaglineDark
 import org.echno.core.designsystem.theme.SplashTaglineLight
 
 /** How long the branded splash stays up. Phase 3 replaces the fixed wait with the session check. */
-private const val SPLASH_DURATION_MS = 1_500L
+private const val SPLASH_DURATION_MS = 2_500L
 
 /**
  * Branded splash: the construction artwork full screen, with the logo and tagline in the
