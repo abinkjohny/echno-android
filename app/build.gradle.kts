@@ -1,3 +1,4 @@
+import com.android.build.api.variant.BuildConfigField
 import java.net.URI
 import java.util.Properties
 
@@ -40,9 +41,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // TODO(Q3): replace once the Android public client is registered in Keycloak.
-        buildConfigField("String", "AUTH_CLIENT_ID", "\"echno-android\"")
-        buildConfigField("String", "AUTH_REDIRECT_URI", "\"org.echno:/oauth2redirect\"")
+        // The public client registered in Keycloak (local-docs/keycloak-setup.md). The redirect URI
+        // depends on the application id, so it is added per variant in androidComponents below.
+        buildConfigField("String", "AUTH_CLIENT_ID", "\"echno-android-client\"")
     }
 
     flavorDimensions += "environment"
@@ -143,6 +144,16 @@ val devCleartextHosts =
         ).mapNotNull { URI(it).host }
 
 androidComponents {
+    onVariants { variant ->
+        // Each build has its own application id (org.echno.dev, org.echno.staging, org.echno), so each
+        // gets its own sign-in redirect and Android never asks which installed app should finish a login.
+        // AppAuth's redirect activity registers for the appAuthRedirectScheme placeholder.
+        variant.manifestPlaceholders.put("appAuthRedirectScheme", variant.applicationId)
+        variant.buildConfigFields?.put(
+            "AUTH_REDIRECT_URI",
+            variant.applicationId.map { BuildConfigField("String", "\"$it:/oauth2redirect\"", null) }
+        )
+    }
     onVariants(selector().withFlavor("environment" to "dev")) { variant ->
         val task =
             tasks.register<GenerateDevNetworkSecurityConfig>(
@@ -181,6 +192,9 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
+
+    implementation(libs.appauth)
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
