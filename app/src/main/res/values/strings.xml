@@ -8,6 +8,13 @@
     <!-- Common actions -->
     <string name="action_retry">Retry</string>
 
+    <!-- Sign in -->
+    <string name="welcome_title">Welcome to Echno</string>
+    <string name="welcome_message">Sign in with your Echno account to see your projects.</string>
+    <string name="welcome_account_created">Account created for %1$s. Sign in to continue.</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="sign_in_error_no_browser">Signing in needs a web browser. Install or turn on a browser, then try again.</string>
+
     <!-- Errors (core/ui/AppErrorMessage.kt) -->
     <string name="error_network">Can\'t reach Echno. Check your internet connection.</string>
     <string name="error_timeout">The server took too long to answer. Try again.</string>

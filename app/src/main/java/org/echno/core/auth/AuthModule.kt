@@ -44,6 +44,10 @@ object AuthModule {
     fun provideSessionStore(store: EncryptedSessionStore): SessionStore = store
 
     @Provides
+    @Singleton
+    fun provideSignInFlow(flow: AppAuthSignInFlow): SignInFlow = flow
+
+    @Provides
     fun provideClock(): Clock = Clock.systemUTC()
 
     // A plain client, without the API client's token interceptor and authenticator, so asking
