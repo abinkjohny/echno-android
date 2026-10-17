@@ -10,5 +10,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object Splash : NavKey
 
+/**
+ * The signed-out home. [registeredUsername] is set right after registering, to welcome the user
+ * and pre-fill the login page.
+ */
+@Serializable
+data class Welcome(val registeredUsername: String? = null) : NavKey
+
+/** The first screen once signed in. A placeholder until the signed-in features arrive. */
 @Serializable
 data object Home : NavKey

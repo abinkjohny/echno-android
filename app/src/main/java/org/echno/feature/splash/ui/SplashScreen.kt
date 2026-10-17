@@ -31,7 +31,7 @@ import org.echno.core.designsystem.theme.SplashTaglineDark
 import org.echno.core.designsystem.theme.SplashTaglineLight
 import org.echno.core.designsystem.theme.TaglineTextStyle
 
-/** How long the branded splash stays up. Phase 3 replaces the fixed wait with the session check. */
+/** The branded splash stays up at least this long, and longer if the stored session is still being read. */
 private const val SPLASH_DURATION_MS = 2_500L
 
 /**

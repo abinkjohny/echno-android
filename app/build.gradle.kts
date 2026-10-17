@@ -96,6 +96,11 @@ android {
         compose = true
         buildConfig = true
     }
+    testOptions {
+        // Android classes in JVM unit tests (e.g. an Intent passed through a ViewModel) return
+        // defaults instead of throwing "Method ... not mocked".
+        unitTests.isReturnDefaultValues = true
+    }
     lint {
         baseline = file("lint-baseline.xml")
         abortOnError = true

@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import org.echno.core.designsystem.theme.EchnoTheme
 import org.echno.navigation.EchnoNavDisplay
@@ -15,6 +18,8 @@ import org.echno.navigation.EchnoNavDisplay
  */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Must run before super.onCreate: hands over from the system splash (Theme.Echno.Starting)
         // to the app theme.
@@ -22,8 +27,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val sessionState by viewModel.sessionState.collectAsStateWithLifecycle()
             EchnoTheme {
-                EchnoNavDisplay()
+                EchnoNavDisplay(sessionState = sessionState)
             }
         }
     }
