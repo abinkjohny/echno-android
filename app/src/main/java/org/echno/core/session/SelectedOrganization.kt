@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * The organization the user is currently working in, sent to the backend as `X-Organization-Id`.
  *
  * `null` means none chosen; the backend then infers it when the user belongs to exactly one.
- * Held in memory for now; Phase 3 persists it and sets it after login (org picker).
+ * Set only by [org.echno.core.auth.SessionManager], which also persists it.
  */
 @Singleton
 class SelectedOrganization @Inject constructor() {

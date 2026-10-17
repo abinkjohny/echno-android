@@ -1,14 +1,34 @@
 package org.echno.core.network
 
+import java.time.Clock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import okhttp3.logging.HttpLoggingInterceptor
 import org.echno.BuildConfig
+import org.echno.core.auth.FakeSessionStore
+import org.echno.core.auth.FakeTokenService
+import org.echno.core.auth.SessionManager
 import org.echno.core.session.SelectedOrganization
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NetworkModuleTest {
-    private val client = NetworkModule.provideOkHttpClient(OrganizationInterceptor(SelectedOrganization()))
+    private val selectedOrganization = SelectedOrganization()
+    private val session =
+        SessionManager(
+            FakeSessionStore(),
+            FakeTokenService(),
+            selectedOrganization,
+            Clock.systemUTC(),
+            CoroutineScope(Dispatchers.Unconfined)
+        )
+    private val client =
+        NetworkModule.provideOkHttpClient(
+            AuthInterceptor(session),
+            TokenAuthenticator(session),
+            OrganizationInterceptor(selectedOrganization)
+        )
 
     @Test
     fun `client sets timeouts`() {
@@ -18,8 +38,14 @@ class NetworkModuleTest {
     }
 
     @Test
-    fun `client sends the organization header`() {
+    fun `client sends the access token and the organization header`() {
+        assertTrue(client.interceptors.any { it is AuthInterceptor })
         assertTrue(client.interceptors.any { it is OrganizationInterceptor })
+    }
+
+    @Test
+    fun `client refreshes the token on 401`() {
+        assertTrue(client.authenticator is TokenAuthenticator)
     }
 
     @Test
