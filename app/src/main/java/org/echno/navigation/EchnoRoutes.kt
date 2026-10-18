@@ -21,6 +21,10 @@ data class Welcome(val registeredUsername: String? = null) : NavKey
 @Serializable
 data object Register : NavKey
 
-/** The first screen once signed in. A placeholder until the signed-in features arrive. */
+/** Signed in, but no organization chosen yet. */
+@Serializable
+data object OrganizationPicker : NavKey
+
+/** The first screen once signed in and working in an organization. A placeholder until the signed-in features arrive. */
 @Serializable
 data object Home : NavKey

@@ -14,10 +14,12 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.echno.core.auth.SessionState
+import org.echno.core.ui.AccountMenu
 import org.echno.feature.auth.ui.register.RegisterScreen
 import org.echno.feature.auth.ui.welcome.WelcomeNotice
 import org.echno.feature.auth.ui.welcome.WelcomeScreen
 import org.echno.feature.home.ui.HomeScreen
+import org.echno.feature.organization.ui.OrganizationPickerScreen
 import org.echno.feature.splash.ui.SplashScreen
 
 /**
@@ -25,12 +27,18 @@ import org.echno.feature.splash.ui.SplashScreen
  * `backStack.add(route)`, go back with `backStack.removeLastOrNull()`.
  * [NavDisplay] shows the last entry and handles the system back gesture.
  *
- * The [sessionState] decides the bottom of the stack (the "root"): Welcome when signed out, Home
- * when signed in. Screens push on top of it. When the session changes (sign-in, sign-out, an expired
+ * The [sessionState] decides the bottom of the stack (the "root"): Welcome when signed out, the
+ * organization picker when signed in without an organization, Home once one is chosen. Screens push on top of it. When the session changes (sign-in, sign-out, an expired
  * session), the stack is replaced, so Back can never lead to a screen of the previous session.
  */
 @Composable
-fun EchnoNavDisplay(sessionState: SessionState, modifier: Modifier = Modifier) {
+fun EchnoNavDisplay(
+    sessionState: SessionState,
+    canSwitchOrganization: Boolean,
+    onSwitchOrganization: () -> Unit,
+    onSignOut: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val backStack = rememberNavBackStack(Splash)
     // Saveable: survives rotation and process death together with the back stack.
     var splashFinished by rememberSaveable { mutableStateOf(false) }
@@ -79,7 +87,8 @@ fun EchnoNavDisplay(sessionState: SessionState, modifier: Modifier = Modifier) {
                     }
                 )
             }
-            entry<Home> { HomeScreen() }
+            entry<OrganizationPicker> { OrganizationPickerScreen() }
+            entry<Home> { HomeScreen(topBarActions = { AccountMenu(canSwitchOrganization, onSwitchOrganization, onSignOut) }) }
         }
     )
 }
@@ -88,5 +97,5 @@ fun EchnoNavDisplay(sessionState: SessionState, modifier: Modifier = Modifier) {
 private fun rootFor(state: SessionState): NavKey? = when (state) {
     SessionState.Loading -> null
     is SessionState.SignedOut -> Welcome()
-    is SessionState.SignedIn -> Home
+    is SessionState.SignedIn -> if (state.organizationId == null) OrganizationPicker else Home
 }

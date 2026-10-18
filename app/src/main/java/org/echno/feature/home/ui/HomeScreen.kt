@@ -1,5 +1,6 @@
 package org.echno.feature.home.ui
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -17,10 +18,15 @@ import org.echno.core.designsystem.theme.EchnoTheme
 /** Placeholder home screen; replaced by the project dashboard in Phase 4. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    // A slot: the caller decides what goes in the top bar (the account menu), so this screen
+    // needn't know about sessions.
+    topBarActions: @Composable RowScope.() -> Unit = {}
+) {
     Scaffold(
         modifier = modifier,
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }, actions = topBarActions) }
     ) { innerPadding ->
         EmptyState(
             title = stringResource(R.string.home_placeholder_title),

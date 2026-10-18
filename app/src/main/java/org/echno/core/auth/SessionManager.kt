@@ -77,6 +77,9 @@ class SessionManager @Inject constructor(
         ended.refreshToken?.let { refreshToken -> scope.launch { tokenService.revoke(refreshToken) } }
     }
 
+    /** The organizations the signed-in user belongs to, as the current access token lists them. */
+    fun memberOrganizationIds(): List<Long> = tokens.get()?.let { AccessTokenClaims.organizationIds(it.accessToken) }.orEmpty()
+
     /**
      * Blocking. The access token to send, refreshed first when it has expired, or null when signed out.
      * Waits for the stored session to be read, so requests made right after launch are authenticated.

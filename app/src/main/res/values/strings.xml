@@ -64,6 +64,17 @@
     <string name="field_error_email_taken">An account with this email already exists</string>
     <string name="field_error_rejected">The server didn\'t accept this value</string>
 
+    <!-- Organizations and account -->
+    <string name="organization_picker_title">Choose organization</string>
+    <string name="organization_picker_message">You belong to more than one organization. Choose the one to work in; you can switch later from the ⋮ menu.</string>
+    <string name="organization_inactive">Inactive</string>
+    <string name="organization_none_title">You\'re not in an organization yet</string>
+    <string name="organization_none_message">Ask your company\'s Echno admin to add you. Once they have, check again.</string>
+    <string name="organization_check_again">Check again</string>
+    <string name="account_menu">Account</string>
+    <string name="action_switch_organization">Switch organization</string>
+    <string name="action_sign_out">Sign out</string>
+
     <!-- Errors (core/ui/AppErrorMessage.kt) -->
     <string name="error_network">Can\'t reach Echno. Check your internet connection.</string>
     <string name="error_timeout">The server took too long to answer. Try again.</string>
