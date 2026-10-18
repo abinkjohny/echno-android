@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,7 +51,12 @@ sealed interface WelcomeNotice {
  * Keycloak's login page.
  */
 @Composable
-fun WelcomeScreen(notice: WelcomeNotice?, modifier: Modifier = Modifier, viewModel: WelcomeViewModel = hiltViewModel()) {
+fun WelcomeScreen(
+    notice: WelcomeNotice?,
+    onCreateAccount: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: WelcomeViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     // Opens the login page in a Custom Tab and receives the result when the browser redirects back.
     // Registered with the Activity, so a result still arrives if Android recreated the screen meanwhile.
@@ -64,12 +70,19 @@ fun WelcomeScreen(notice: WelcomeNotice?, modifier: Modifier = Modifier, viewMod
         uiState = uiState,
         notice = notice,
         onSignIn = { viewModel.signInIntent(loginHint)?.let(signInLauncher::launch) },
+        onCreateAccount = onCreateAccount,
         modifier = modifier
     )
 }
 
 @Composable
-fun WelcomeContent(uiState: WelcomeUiState, notice: WelcomeNotice?, onSignIn: () -> Unit, modifier: Modifier = Modifier) {
+fun WelcomeContent(
+    uiState: WelcomeUiState,
+    notice: WelcomeNotice?,
+    onSignIn: () -> Unit,
+    onCreateAccount: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val taglineColor = if (isSystemInDarkTheme()) SplashTaglineDark else SplashTaglineLight
 
     Box(modifier.fillMaxSize()) {
@@ -124,6 +137,13 @@ fun WelcomeContent(uiState: WelcomeUiState, notice: WelcomeNotice?, onSignIn: ()
                             Text(stringResource(R.string.action_sign_in))
                         }
                     }
+                    OutlinedButton(
+                        onClick = onCreateAccount,
+                        enabled = !uiState.isSigningIn,
+                        modifier = Modifier.fillMaxWidth().height(48.dp)
+                    ) {
+                        Text(stringResource(R.string.action_create_account))
+                    }
                 }
             }
         }
@@ -146,7 +166,7 @@ private fun NoticeText(notice: WelcomeNotice?) {
 @Composable
 private fun WelcomePreview() {
     EchnoTheme {
-        WelcomeContent(uiState = WelcomeUiState(), notice = null, onSignIn = {})
+        WelcomeContent(uiState = WelcomeUiState(), notice = null, onSignIn = {}, onCreateAccount = {})
     }
 }
 
@@ -154,6 +174,6 @@ private fun WelcomePreview() {
 @Composable
 private fun WelcomeExpiredPreview() {
     EchnoTheme {
-        WelcomeContent(uiState = WelcomeUiState(), notice = WelcomeNotice.SessionExpired, onSignIn = {})
+        WelcomeContent(uiState = WelcomeUiState(), notice = WelcomeNotice.SessionExpired, onSignIn = {}, onCreateAccount = {})
     }
 }

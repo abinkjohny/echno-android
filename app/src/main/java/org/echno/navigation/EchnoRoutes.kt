@@ -17,6 +17,10 @@ data object Splash : NavKey
 @Serializable
 data class Welcome(val registeredUsername: String? = null) : NavKey
 
+/** The registration form, opened from Welcome. */
+@Serializable
+data object Register : NavKey
+
 /** The first screen once signed in. A placeholder until the signed-in features arrive. */
 @Serializable
 data object Home : NavKey
