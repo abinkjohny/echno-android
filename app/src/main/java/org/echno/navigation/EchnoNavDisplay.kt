@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.echno.core.auth.SessionState
+import org.echno.feature.auth.ui.register.RegisterScreen
 import org.echno.feature.auth.ui.welcome.WelcomeNotice
 import org.echno.feature.auth.ui.welcome.WelcomeScreen
 import org.echno.feature.home.ui.HomeScreen
@@ -66,7 +67,17 @@ fun EchnoNavDisplay(sessionState: SessionState, modifier: Modifier = Modifier) {
                         (sessionState as? SessionState.SignedOut)?.sessionExpired == true -> WelcomeNotice.SessionExpired
                         else -> null
                     }
-                WelcomeScreen(notice = notice)
+                WelcomeScreen(notice = notice, onCreateAccount = { backStack.add(Register) })
+            }
+            entry<Register> {
+                RegisterScreen(
+                    onBack = { backStack.removeLastOrNull() },
+                    // Replace the stack so Back from Welcome can't reopen the finished form.
+                    onRegistered = { username ->
+                        backStack.clear()
+                        backStack.add(Welcome(registeredUsername = username))
+                    }
+                )
             }
             entry<Home> { HomeScreen() }
         }
