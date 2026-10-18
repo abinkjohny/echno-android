@@ -28,8 +28,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val sessionState by viewModel.sessionState.collectAsStateWithLifecycle()
+            val canSwitchOrganization by viewModel.canSwitchOrganization.collectAsStateWithLifecycle()
             EchnoTheme {
-                EchnoNavDisplay(sessionState = sessionState)
+                EchnoNavDisplay(
+                    sessionState = sessionState,
+                    canSwitchOrganization = canSwitchOrganization,
+                    onSwitchOrganization = viewModel::switchOrganization,
+                    onSignOut = viewModel::signOut
+                )
             }
         }
     }
