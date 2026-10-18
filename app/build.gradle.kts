@@ -141,12 +141,14 @@ abstract class GenerateDevNetworkSecurityConfig : DefaultTask() {
     }
 }
 
+// Only http:// overrides need the exception; an https:// one (e.g. pointing dev at staging) stays
+// encrypted-only.
 val devCleartextHosts =
     setOf("10.0.2.2", "localhost") +
         listOf(
             local("echno.dev.apiBaseUrl", "http://10.0.2.2:8080/"),
             local("echno.dev.authIssuer", "http://10.0.2.2:8180/realms/echno-realm")
-        ).mapNotNull { URI(it).host }
+        ).map(::URI).filter { it.scheme == "http" }.mapNotNull { it.host }
 
 androidComponents {
     onVariants { variant ->
