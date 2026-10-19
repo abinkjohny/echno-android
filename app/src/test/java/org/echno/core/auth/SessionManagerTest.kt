@@ -73,6 +73,20 @@ class SessionManagerTest {
     }
 
     @Test
+    fun `clearing an expired session never erases a sign-in that came after it`() = runTest {
+        val store = FakeSessionStore(StoredSession(tokens("old"), 5))
+        tokenService.refreshResult = TokenResult.Rejected
+        val manager = manager(store)
+
+        manager.refreshAccessToken("old") // expired: the clear is queued, not run yet
+        manager.signIn(tokens("a2"))
+        runCurrent() // now the queued clear runs
+
+        assertEquals(SessionState.SignedIn(null), manager.state.value)
+        assertEquals("a2", store.stored.tokens?.accessToken)
+    }
+
+    @Test
     fun `a token another request already refreshed is reused`() = runTest {
         tokenService.refreshResult = TokenResult.Success(tokens("new"))
         val manager = manager(FakeSessionStore(StoredSession(tokens("old"), 5)))
