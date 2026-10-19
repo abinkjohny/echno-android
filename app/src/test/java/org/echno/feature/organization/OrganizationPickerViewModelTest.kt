@@ -71,6 +71,18 @@ class OrganizationPickerViewModelTest {
     }
 
     @Test
+    fun `a single inactive organization is listed, not chosen`() = runTest {
+        val inactive = malabar.copy(isActive = false)
+        repository.result = ApiResult.Success(listOf(inactive))
+
+        val viewModel = OrganizationPickerViewModel(repository, session)
+        advanceUntilIdle()
+
+        assertEquals(OrganizationPickerUiState.Loaded(listOf(inactive)), viewModel.uiState.value)
+        assertEquals(SessionState.SignedIn(null), session.state.value)
+    }
+
+    @Test
     fun `choosing one selects it for the session`() = runTest {
         repository.result = ApiResult.Success(listOf(malabar, periyar))
         val viewModel = OrganizationPickerViewModel(repository, session)
