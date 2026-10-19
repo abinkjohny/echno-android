@@ -76,6 +76,28 @@
     <string name="action_switch_organization">Switch organization</string>
     <string name="action_sign_out">Sign out</string>
 
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_section_contact">Contact</string>
+    <string name="profile_section_personal">Personal</string>
+    <string name="profile_section_work">Work</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_label_phone">Phone</string>
+    <string name="profile_label_emergency_contact">Emergency contact</string>
+    <string name="profile_label_address">Address</string>
+    <string name="profile_label_gender">Gender</string>
+    <string name="profile_label_date_of_birth">Date of birth</string>
+    <string name="profile_label_blood_group">Blood group</string>
+    <string name="profile_label_qualification">Qualification</string>
+    <string name="profile_label_experience">Experience</string>
+    <string name="profile_label_skills">Skills</string>
+    <string name="profile_label_certifications">Certifications</string>
+    <plurals name="profile_experience_years">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <string name="profile_member_since">Member since %1$s</string>
+
     <!-- Errors (core/ui/AppErrorMessage.kt) -->
     <string name="error_network">Can\'t reach Echno. Check your internet connection.</string>
     <string name="error_timeout">The server took too long to answer. Try again.</string>
@@ -88,7 +110,4 @@
     <string name="error_server">Something went wrong on the server. Try again later.</string>
     <string name="error_unknown">Something went wrong. Try again.</string>
 
-    <!-- Home (placeholder until Phase 4) -->
-    <string name="home_placeholder_title">Welcome to Echno</string>
-    <string name="home_placeholder_message">Environment: %1$s\nAPI: %2$s</string>
 </resources>
