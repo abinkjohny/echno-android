@@ -18,8 +18,8 @@ import org.echno.core.ui.AccountMenu
 import org.echno.feature.auth.ui.register.RegisterScreen
 import org.echno.feature.auth.ui.welcome.WelcomeNotice
 import org.echno.feature.auth.ui.welcome.WelcomeScreen
-import org.echno.feature.home.ui.HomeScreen
 import org.echno.feature.organization.ui.OrganizationPickerScreen
+import org.echno.feature.profile.ui.ProfileScreen
 import org.echno.feature.splash.ui.SplashScreen
 
 /**
@@ -28,7 +28,7 @@ import org.echno.feature.splash.ui.SplashScreen
  * [NavDisplay] shows the last entry and handles the system back gesture.
  *
  * The [sessionState] decides the bottom of the stack (the "root"): Welcome when signed out, the
- * organization picker when signed in without an organization, Home once one is chosen. Screens push on top of it. When the session changes (sign-in, sign-out, an expired
+ * organization picker when signed in without an organization, Profile once one is chosen. Screens push on top of it. When the session changes (sign-in, sign-out, an expired
  * session), the stack is replaced, so Back can never lead to a screen of the previous session.
  */
 @Composable
@@ -88,7 +88,9 @@ fun EchnoNavDisplay(
                 )
             }
             entry<OrganizationPicker> { OrganizationPickerScreen() }
-            entry<Home> { HomeScreen(topBarActions = { AccountMenu(canSwitchOrganization, onSwitchOrganization, onSignOut) }) }
+            entry<Profile> {
+                ProfileScreen(topBarActions = { AccountMenu(canSwitchOrganization, onSwitchOrganization, onSignOut) })
+            }
         }
     )
 }
@@ -97,5 +99,5 @@ fun EchnoNavDisplay(
 private fun rootFor(state: SessionState): NavKey? = when (state) {
     SessionState.Loading -> null
     is SessionState.SignedOut -> Welcome()
-    is SessionState.SignedIn -> if (state.organizationId == null) OrganizationPicker else Home
+    is SessionState.SignedIn -> if (state.organizationId == null) OrganizationPicker else Profile
 }

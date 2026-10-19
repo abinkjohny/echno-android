@@ -25,6 +25,6 @@ data object Register : NavKey
 @Serializable
 data object OrganizationPicker : NavKey
 
-/** The first screen once signed in and working in an organization. A placeholder until the signed-in features arrive. */
+/** The signed-in user's profile: the first screen once signed in and working in an organization. */
 @Serializable
-data object Home : NavKey
+data object Profile : NavKey

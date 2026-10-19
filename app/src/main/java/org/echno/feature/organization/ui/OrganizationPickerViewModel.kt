@@ -40,7 +40,7 @@ class OrganizationPickerViewModel @Inject constructor(
         load()
     }
 
-    /** Navigation follows the session: once an organization is selected, Home replaces this screen. */
+    /** Navigation follows the session: once an organization is selected, Profile replaces this screen. */
     fun select(organizationId: Long) {
         viewModelScope.launch { sessionManager.selectOrganization(organizationId) }
     }
