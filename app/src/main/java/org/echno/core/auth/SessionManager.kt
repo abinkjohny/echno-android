@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.echno.core.coroutines.ApplicationScope
 import org.echno.core.session.SelectedOrganization
 
@@ -38,6 +40,11 @@ class SessionManager @Inject constructor(
     private val restored = CompletableDeferred<Unit>()
     private val refreshLock = Any()
 
+    // Every write to the store goes through this lock and first checks that it still matches the
+    // session in memory. Without it, a refresh finishing just after a sign-out could save its tokens
+    // again (signed back in on the next launch), or a late clear could erase a newer sign-in.
+    private val storeLock = Mutex()
+
     init {
         scope.launch { restore() }
     }
@@ -53,17 +60,21 @@ class SessionManager @Inject constructor(
 
     /** Called once Keycloak has issued tokens for a new sign-in. */
     suspend fun signIn(newTokens: AuthTokens) {
-        store.saveOrganization(null)
-        store.saveTokens(newTokens)
-        tokens.set(newTokens)
+        storeLock.withLock {
+            store.saveOrganization(null)
+            store.saveTokens(newTokens)
+            tokens.set(newTokens)
+        }
         selectedOrganization.select(null)
         _state.value = SessionState.SignedIn(organizationId = null)
     }
 
     /** Sets the organization sent as `X-Organization-Id`; null goes back to the organization picker. */
     suspend fun selectOrganization(organizationId: Long?) {
-        if (tokens.get() == null) return
-        store.saveOrganization(organizationId)
+        storeLock.withLock {
+            if (tokens.get() == null) return
+            store.saveOrganization(organizationId)
+        }
         selectedOrganization.select(organizationId)
         _state.value = SessionState.SignedIn(organizationId)
     }
@@ -73,7 +84,7 @@ class SessionManager @Inject constructor(
         val ended = tokens.getAndSet(null) ?: return
         selectedOrganization.select(null)
         _state.value = SessionState.SignedOut()
-        store.clear()
+        clearStoreIfSignedOut()
         ended.refreshToken?.let { refreshToken -> scope.launch { tokenService.revoke(refreshToken) } }
     }
 
@@ -114,7 +125,12 @@ class SessionManager @Inject constructor(
             is TokenResult.Success -> {
                 if (!tokens.compareAndSet(current, result.tokens)) return null // signed out meanwhile
                 // Saved before returning: Keycloak has already invalidated the old refresh token.
-                runBlocking { store.saveTokens(result.tokens) }
+                runBlocking {
+                    storeLock.withLock {
+                        // A sign-out may have happened since the line above; then there's nothing to save.
+                        if (tokens.get() === result.tokens) store.saveTokens(result.tokens)
+                    }
+                }
                 result.tokens.accessToken
             }
             TokenResult.Rejected -> {
@@ -129,6 +145,11 @@ class SessionManager @Inject constructor(
         if (!tokens.compareAndSet(expired, null)) return
         selectedOrganization.select(null)
         _state.value = SessionState.SignedOut(sessionExpired = true)
-        scope.launch { store.clear() }
+        scope.launch { clearStoreIfSignedOut() }
+    }
+
+    // Skipped when someone signed in again before this ran: the store then holds the new session.
+    private suspend fun clearStoreIfSignedOut() = storeLock.withLock {
+        if (tokens.get() == null) store.clear()
     }
 }
