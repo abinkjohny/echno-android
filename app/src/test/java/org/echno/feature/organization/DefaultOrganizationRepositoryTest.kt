@@ -11,6 +11,7 @@ import org.echno.feature.organization.data.OrganizationApi
 import org.echno.feature.organization.domain.Organization
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -67,8 +68,14 @@ class DefaultOrganizationRepositoryTest {
     }
 
     @Test
-    fun `no memberships means no organizations, without a request`() = runTest {
-        assertEquals(ApiResult.Success(emptyList<Organization>()), repository.getMyOrganizations(emptyList()))
-        assertEquals(0, server.requestCount)
+    fun `a token without memberships still asks the server, without a scope`() = runTest {
+        server.enqueue(MockResponse.Builder().body("""{"id":42}""").build())
+        server.enqueue(MockResponse.Builder().body("""[{"id":5,"organizationName":"Malabar Builders"}]""").build())
+
+        val result = repository.getMyOrganizations(emptyList())
+
+        assertNull(server.takeRequest().headers["X-Organization-Id"])
+        assertNull(server.takeRequest().headers["X-Organization-Id"])
+        assertEquals(listOf(5L), (result as ApiResult.Success).data.map { it.id })
     }
 }

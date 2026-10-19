@@ -10,14 +10,16 @@ import org.echno.feature.organization.domain.Organization
 interface OrganizationRepository {
     /**
      * The organizations the user belongs to. [memberOf] are the ids from the access token; the
-     * first is used to scope the requests. Empty [memberOf] means none, without asking the server.
+     * first scopes the requests. When the token lists none (no `groups` claim, e.g. the client's
+     * mapper is missing), the server is still asked, without a scope: the backend works it out
+     * when the user belongs to at most one organization.
      */
     suspend fun getMyOrganizations(memberOf: List<Long>): ApiResult<List<Organization>>
 }
 
 class DefaultOrganizationRepository @Inject constructor(private val api: OrganizationApi) : OrganizationRepository {
     override suspend fun getMyOrganizations(memberOf: List<Long>): ApiResult<List<Organization>> {
-        val scope = memberOf.firstOrNull() ?: return ApiResult.Success(emptyList())
+        val scope = memberOf.firstOrNull()
         return safeApiCall {
             val user = api.getCurrentUser(scope)
             api.getOrganizations(user.id, scope)
