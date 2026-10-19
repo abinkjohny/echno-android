@@ -55,7 +55,7 @@ class RegisterContentTest {
     fun typing_fillsTheForm() {
         show()
 
-        composeRule.onNode(hasSetTextAction() and hasText("Full name")).performTextInput("Asha Menon")
+        composeRule.onNode(hasSetTextAction() and hasText("Full Name")).performTextInput("Asha Menon")
         composeRule.onNode(hasSetTextAction() and hasText("Email")).performTextInput("asha@example.com")
 
         assertEquals("Asha Menon", state.form.fullName)
@@ -68,7 +68,7 @@ class RegisterContentTest {
 
         composeRule.onNodeWithText("Female").performScrollTo().performClick()
         composeRule.onNode(hasText("Role")).performScrollTo().performClick()
-        composeRule.onNodeWithText("HR manager").performClick()
+        composeRule.onNodeWithText("HR Manager").performClick()
         composeRule.onNodeWithText("I agree to the Terms of Service and Privacy Policy").performScrollTo().performClick()
 
         assertEquals(Gender.Female, state.form.gender)
@@ -97,8 +97,8 @@ class RegisterContentTest {
     fun createAccount_submits() {
         show()
 
-        // The title also reads "Create account"; the button is the one that can be clicked.
-        composeRule.onNode(hasText("Create account") and hasClickAction()).performScrollTo().performClick()
+        // The title also reads "Create Account"; the button is the one that can be clicked.
+        composeRule.onNode(hasText("Create Account") and hasClickAction()).performScrollTo().performClick()
 
         assertEquals(1, submits)
     }

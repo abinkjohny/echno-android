@@ -36,7 +36,7 @@ class WelcomeContentTest {
         show()
 
         composeRule.onNodeWithText("Sign in").performClick()
-        composeRule.onNodeWithText("Create account").performClick()
+        composeRule.onNodeWithText("Create Account").performClick()
 
         assertEquals(1, signIns)
         assertEquals(1, createAccounts)
@@ -46,13 +46,13 @@ class WelcomeContentTest {
     fun afterRegistering_theUsernameIsShown() {
         show(notice = WelcomeNotice.AccountCreated("asha.menon"))
 
-        composeRule.onNodeWithText("Account created for asha.menon. Sign in to continue.").assertIsDisplayed()
+        composeRule.onNodeWithText("Account created for asha.menon. Sign In to Continue.").assertIsDisplayed()
     }
 
     @Test
     fun whileSigningIn_createAccountIsDisabled() {
         show(WelcomeUiState(isSigningIn = true))
 
-        composeRule.onNodeWithText("Create account").assertIsNotEnabled()
+        composeRule.onNodeWithText("Create Account").assertIsNotEnabled()
     }
 }
