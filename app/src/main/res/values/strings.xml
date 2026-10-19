@@ -61,6 +61,7 @@
     <string name="field_error_password_weak">At least 8 characters, with upper and lower case letters, a number and a symbol</string>
     <string name="field_error_password_mismatch">The passwords don\'t match</string>
     <string name="field_error_terms">Accept the terms to continue</string>
+    <string name="register_error_conflict">Some of these details are already used by another account.</string>
     <string name="field_error_email_taken">An account with this email already exists</string>
     <string name="field_error_rejected">The server didn\'t accept this value</string>
 

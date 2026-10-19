@@ -87,6 +87,19 @@ class RegisterViewModelTest {
     }
 
     @Test
+    fun `a conflict that names no field goes to the snackbar`() = runTest {
+        repository.result = ApiResult.Failure(AppError.Conflict("Database operation failed, Data Integrity violation"))
+        viewModel.onFormChange(validForm)
+
+        viewModel.submit()
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertEquals(emptyMap<RegistrationField, FieldError>(), state.errors)
+        assertEquals(AppError.Conflict("Database operation failed, Data Integrity violation"), state.submitError)
+    }
+
+    @Test
     fun `server field errors land on their fields`() = runTest {
         repository.result = ApiResult.Failure(AppError.Validation("Validation Failed", mapOf("userName" to "taken", "unknownField" to "x")))
         viewModel.onFormChange(validForm)

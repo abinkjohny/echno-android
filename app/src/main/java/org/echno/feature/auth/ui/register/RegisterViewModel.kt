@@ -66,8 +66,14 @@ class RegisterViewModel @Inject constructor(private val repository: Registration
     private fun RegisterUiState.withFailure(error: AppError): RegisterUiState {
         val fieldErrors =
             when (error) {
-                // The backend answers 409 when the email is already registered.
-                is AppError.Conflict -> mapOf(RegistrationField.Email to FieldError.EmailTaken)
+                // "User with email '…' already exists". Other 409s (a database constraint) name no
+                // field, so they go to the snackbar.
+                is AppError.Conflict ->
+                    if (error.detail?.contains("email", ignoreCase = true) == true) {
+                        mapOf(RegistrationField.Email to FieldError.EmailTaken)
+                    } else {
+                        emptyMap()
+                    }
                 // Bean Validation names the DTO's fields; anything the app can't place goes to the snackbar.
                 is AppError.Validation -> error.fieldErrors.keys.mapNotNull(::fieldForServerName).associateWith { FieldError.Rejected }
                 else -> emptyMap()

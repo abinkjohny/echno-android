@@ -73,6 +73,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import org.echno.R
 import org.echno.core.designsystem.theme.EchnoTheme
+import org.echno.core.network.AppError
 import org.echno.core.ui.messageRes
 import org.echno.feature.auth.domain.AccountRole
 import org.echno.feature.auth.domain.FieldError
@@ -115,7 +116,11 @@ fun RegisterContent(
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val submitErrorMessage = uiState.submitError?.let { stringResource(it.messageRes()) }
+    val submitErrorMessage =
+        uiState.submitError?.let { error ->
+            // The shared 409 sentence is about editing a record; here it means the details clash with an account.
+            stringResource(if (error is AppError.Conflict) R.string.register_error_conflict else error.messageRes())
+        }
     LaunchedEffect(submitErrorMessage) {
         if (submitErrorMessage != null) {
             snackbarHostState.showSnackbar(submitErrorMessage)
