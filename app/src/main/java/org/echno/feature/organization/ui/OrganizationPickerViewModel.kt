@@ -54,8 +54,9 @@ class OrganizationPickerViewModel @Inject constructor(
             when (val result = repository.getMyOrganizations(sessionManager.memberOrganizationIds())) {
                 is ApiResult.Success -> {
                     val organizations = result.data
-                    // Nothing to choose between: go straight in, still showing progress.
-                    if (organizations.size == 1) {
+                    // Nothing to choose between: go straight in, still showing progress. An inactive
+                    // one is listed instead, disabled, as it would be among several.
+                    if (organizations.size == 1 && organizations.single().isActive) {
                         sessionManager.selectOrganization(organizations.single().id)
                     } else {
                         _uiState.value = OrganizationPickerUiState.Loaded(organizations)
