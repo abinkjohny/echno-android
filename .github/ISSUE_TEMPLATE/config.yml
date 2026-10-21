@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Backend or API problem
+    url: https://github.com/tornotron/echno-backend/issues
+    about: Wrong data or errors from the server itself belong in the backend repository.

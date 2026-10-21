@@ -1,0 +1,35 @@
+name: Accessibility problem
+description: Something is hard or impossible to use with TalkBack, large text, a switch or another assistive setting.
+labels: ["accessibility", "bug"]
+body:
+  - type: input
+    id: screen
+    attributes:
+      label: Screen
+      placeholder: Registration form
+    validations:
+      required: true
+  - type: checkboxes
+    id: settings
+    attributes:
+      label: Settings in use
+      options:
+        - label: TalkBack
+        - label: Large font or display size
+        - label: Dark theme
+        - label: Switch Access or keyboard navigation
+        - label: Other (describe below)
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: What you heard, saw or couldn't reach, and what you expected.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: Pixel 8, Android 16
+    validations:
+      required: true
