@@ -1,0 +1,18 @@
+name: Question
+description: Ask about building, running or working on the app.
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: Check the README, CONTRIBUTING.md and docs/ first; your answer may already be there.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you've tried
+      description: Commands, settings or documents you've already looked at.
