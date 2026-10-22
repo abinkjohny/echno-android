@@ -6,6 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -86,6 +87,21 @@ class SessionManager @Inject constructor(
         _state.value = SessionState.SignedOut()
         clearStoreIfSignedOut()
         ended.refreshToken?.let { refreshToken -> scope.launch { tokenService.revoke(refreshToken) } }
+    }
+
+    /**
+     * Gets a new access token now, without waiting for the current one to expire, so a membership
+     * the server has just granted (joining with an invitation code) is in it. The backend checks
+     * membership against the token, so until then it would refuse the new organization.
+     * False when no new token could be had: offline, Keycloak unreachable, or signed out.
+     *
+     * Runs in the application scope (on IO), not the caller's: Keycloak rotates refresh tokens, so
+     * once a refresh starts it must finish and be saved even if the screen that asked has closed.
+     */
+    suspend fun refreshMemberships(): Boolean {
+        val current = tokens.get() ?: return false
+        val refreshed = scope.async { refreshAccessToken(current.accessToken) }.await()
+        return refreshed != null && refreshed != current.accessToken
     }
 
     /** The organizations the signed-in user belongs to, as the current access token lists them. */
