@@ -6,7 +6,7 @@
     <string name="splash_logo_description">Echno</string>
 
     <!-- Common actions -->
-    <string name="action_retry">Retry</string>
+    <string name="action_retry">Try Again</string>
     <string name="action_back">Back</string>
 
     <!-- Sign in -->
@@ -99,6 +99,7 @@
     <string name="profile_member_since">Member since %1$s</string>
 
     <!-- Errors (core/ui/AppErrorMessage.kt) -->
+    <string name="error_title_default">Something went wrong</string>
     <string name="error_network">Can\'t reach Echno. Check your internet connection.</string>
     <string name="error_timeout">The server took too long to answer. Try again.</string>
     <string name="error_unauthorized">Your session has ended. Sign in again.</string>

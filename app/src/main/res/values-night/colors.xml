@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="splash_background">#FF0C1D2D</color>
+    <!-- The line drawing on empty states (drawable/illustration_crane.xml). -->
+    <color name="illustration_line">#FF9DB6E0</color>
+    <color name="illustration_accent">#FFF0AE4C</color>
 </resources>
