@@ -19,6 +19,7 @@ import org.echno.feature.auth.ui.register.RegisterScreen
 import org.echno.feature.auth.ui.welcome.WelcomeNotice
 import org.echno.feature.auth.ui.welcome.WelcomeScreen
 import org.echno.feature.organization.ui.OrganizationPickerScreen
+import org.echno.feature.organization.ui.join.JoinOrganizationScreen
 import org.echno.feature.profile.ui.ProfileScreen
 import org.echno.feature.splash.ui.SplashScreen
 
@@ -87,7 +88,9 @@ fun EchnoNavDisplay(
                     }
                 )
             }
-            entry<OrganizationPicker> { OrganizationPickerScreen() }
+            entry<OrganizationPicker> { OrganizationPickerScreen(onJoinOrganization = { backStack.add(JoinOrganization) }) }
+            // Once the code is redeemed the organization is selected, and the session change replaces the stack with Profile.
+            entry<JoinOrganization> { JoinOrganizationScreen(onBack = { backStack.removeLastOrNull() }) }
             entry<Profile> {
                 ProfileScreen(account = AccountActions(canSwitchOrganization, onSwitchOrganization, onSignOut))
             }

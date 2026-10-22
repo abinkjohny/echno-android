@@ -24,6 +24,7 @@ class OrganizationPickerContentTest {
     private var selected: Long? = null
     private var signOuts = 0
     private var retries = 0
+    private var joins = 0
 
     private fun show(state: OrganizationPickerUiState) {
         composeRule.setContent {
@@ -33,6 +34,7 @@ class OrganizationPickerContentTest {
                     onSelect = { selected = it },
                     onRetry = { retries++ },
                     onSignOut = { signOuts++ },
+                    onJoinOrganization = { joins++ },
                     // Pinned, so the test behaves the same on a phone and a tablet emulator.
                     layoutWidth = LayoutWidth.Compact
                 )
@@ -58,15 +60,15 @@ class OrganizationPickerContentTest {
     }
 
     @Test
-    fun noOrganization_explainsAndOffersCheckAgainAndSignOut() {
+    fun noOrganization_explainsAndOffersJoinAndSignOut() {
         show(OrganizationPickerUiState.Loaded(emptyList()))
 
         composeRule.onNodeWithText("You're not in an organization yet").assertIsDisplayed()
-        composeRule.onNodeWithText("Check Again").performClick()
+        composeRule.onNodeWithText("Join Organization").performClick()
         // Sign Out is in the header and in the empty state.
         composeRule.onAllNodesWithText("Sign Out")[1].performClick()
 
-        assertEquals(1, retries)
+        assertEquals(1, joins)
         assertEquals(1, signOuts)
     }
 }

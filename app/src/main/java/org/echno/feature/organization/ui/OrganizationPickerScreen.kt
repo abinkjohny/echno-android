@@ -36,11 +36,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.echno.R
 import org.echno.core.designsystem.component.EmptyState
 import org.echno.core.designsystem.component.ErrorState
-import org.echno.core.designsystem.component.FilledButton
 import org.echno.core.designsystem.component.HeaderPillButton
 import org.echno.core.designsystem.component.HorizonHeader
 import org.echno.core.designsystem.component.LoadingState
 import org.echno.core.designsystem.component.OutlineButton
+import org.echno.core.designsystem.component.PrimaryButton
 import org.echno.core.designsystem.component.SiteTag
 import org.echno.core.designsystem.theme.EchnoTheme
 import org.echno.core.network.AppError
@@ -51,13 +51,18 @@ import org.echno.core.ui.messageRes
 import org.echno.feature.organization.domain.Organization
 
 @Composable
-fun OrganizationPickerScreen(modifier: Modifier = Modifier, viewModel: OrganizationPickerViewModel = hiltViewModel()) {
+fun OrganizationPickerScreen(
+    onJoinOrganization: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: OrganizationPickerViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     OrganizationPickerContent(
         uiState = uiState,
         onSelect = viewModel::select,
         onRetry = viewModel::retry,
         onSignOut = viewModel::signOut,
+        onJoinOrganization = onJoinOrganization,
         modifier = modifier
     )
 }
@@ -72,6 +77,7 @@ fun OrganizationPickerContent(
     onSelect: (Long) -> Unit,
     onRetry: () -> Unit,
     onSignOut: () -> Unit,
+    onJoinOrganization: () -> Unit,
     modifier: Modifier = Modifier,
     layoutWidth: LayoutWidth = currentLayoutWidth()
 ) {
@@ -98,7 +104,7 @@ fun OrganizationPickerContent(
                         )
                     is OrganizationPickerUiState.Loaded ->
                         if (uiState.organizations.isEmpty()) {
-                            NoOrganization(onRetry, onSignOut)
+                            NoOrganization(onJoinOrganization, onSignOut)
                         } else {
                             OrganizationGrid(uiState.organizations, onSelect, wide = layoutWidth == LayoutWidth.Expanded)
                         }
@@ -175,18 +181,19 @@ private fun OrganizationCard(organization: Organization, onClick: () -> Unit) {
     }
 }
 
-/** Signed in but not a member of anything yet, the normal state right after registering. */
+/** Signed in but not a member of anything yet, the normal state right after registering: join with a code. */
 @Composable
-private fun NoOrganization(onRetry: () -> Unit, onSignOut: () -> Unit) {
+private fun NoOrganization(onJoinOrganization: () -> Unit, onSignOut: () -> Unit) {
     EmptyState(
         title = stringResource(R.string.organization_none_title),
         message = stringResource(R.string.organization_none_message),
         modifier = Modifier.navigationBarsPadding()
     ) {
         Column(Modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            FilledButton(
-                stringResource(R.string.organization_check_again),
-                onClick = onRetry,
+            // Joining is the way out of here, so it's the screen's one amber action.
+            PrimaryButton(
+                stringResource(R.string.action_join_organization),
+                onClick = onJoinOrganization,
                 modifier = Modifier.fillMaxWidth(),
                 height = 52.dp
             )
@@ -206,7 +213,13 @@ private val previewOrganizations =
 @Composable
 private fun OrganizationPickerPreview() {
     EchnoTheme {
-        OrganizationPickerContent(OrganizationPickerUiState.Loaded(previewOrganizations), onSelect = {}, onRetry = {}, onSignOut = {})
+        OrganizationPickerContent(
+            OrganizationPickerUiState.Loaded(previewOrganizations),
+            onSelect = {},
+            onRetry = {},
+            onSignOut = {},
+            onJoinOrganization = {}
+        )
     }
 }
 
@@ -214,7 +227,13 @@ private fun OrganizationPickerPreview() {
 @Composable
 private fun NoOrganizationPreview() {
     EchnoTheme {
-        OrganizationPickerContent(OrganizationPickerUiState.Loaded(emptyList()), onSelect = {}, onRetry = {}, onSignOut = {})
+        OrganizationPickerContent(
+            OrganizationPickerUiState.Loaded(emptyList()),
+            onSelect = {},
+            onRetry = {},
+            onSignOut = {},
+            onJoinOrganization = {}
+        )
     }
 }
 
@@ -222,7 +241,13 @@ private fun NoOrganizationPreview() {
 @Composable
 private fun OrganizationPickerErrorPreview() {
     EchnoTheme {
-        OrganizationPickerContent(OrganizationPickerUiState.Error(AppError.Network), onSelect = {}, onRetry = {}, onSignOut = {})
+        OrganizationPickerContent(
+            OrganizationPickerUiState.Error(AppError.Network),
+            onSelect = {},
+            onRetry = {},
+            onSignOut = {},
+            onJoinOrganization = {}
+        )
     }
 }
 
@@ -235,6 +260,7 @@ private fun OrganizationPickerTabletPreview() {
             onSelect = {},
             onRetry = {},
             onSignOut = {},
+            onJoinOrganization = {},
             layoutWidth = LayoutWidth.Expanded
         )
     }
