@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -55,8 +56,8 @@ class RegisterContentTest {
     fun typing_fillsTheForm() {
         show()
 
-        composeRule.onNode(hasSetTextAction() and hasText("Full Name")).performTextInput("Asha Menon")
-        composeRule.onNode(hasSetTextAction() and hasText("Email")).performTextInput("asha@example.com")
+        composeRule.onNode(hasSetTextAction() and hasContentDescription("Full Name")).performTextInput("Asha Menon")
+        composeRule.onNode(hasSetTextAction() and hasContentDescription("Email")).performTextInput("asha@example.com")
 
         assertEquals("Asha Menon", state.form.fullName)
         assertEquals("asha@example.com", state.form.email)
@@ -67,7 +68,7 @@ class RegisterContentTest {
         show()
 
         composeRule.onNodeWithText("Female").performScrollTo().performClick()
-        composeRule.onNode(hasText("Role")).performScrollTo().performClick()
+        composeRule.onNode(hasContentDescription("Role")).performScrollTo().performClick()
         composeRule.onNodeWithText("HR Manager").performClick()
         composeRule.onNodeWithText("I agree to the Terms of Service and Privacy Policy").performScrollTo().performClick()
 
