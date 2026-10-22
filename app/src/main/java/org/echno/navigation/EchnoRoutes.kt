@@ -25,6 +25,10 @@ data object Register : NavKey
 @Serializable
 data object OrganizationPicker : NavKey
 
+/** Enter an invitation code to join an organization, opened from the picker when you're in none. */
+@Serializable
+data object JoinOrganization : NavKey
+
 /** The signed-in user's profile: the first screen once signed in and working in an organization. */
 @Serializable
 data object Profile : NavKey
