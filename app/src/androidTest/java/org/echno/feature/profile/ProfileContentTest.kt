@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.time.LocalDate
 import org.echno.core.designsystem.theme.EchnoTheme
 import org.echno.core.network.AppError
+import org.echno.core.ui.AccountActions
 import org.echno.feature.auth.domain.AccountRole
 import org.echno.feature.organization.domain.Organization
 import org.echno.feature.profile.domain.Profile
@@ -47,7 +48,7 @@ class ProfileContentTest {
         )
 
     private fun show(state: ProfileUiState) {
-        composeRule.setContent { EchnoTheme { ProfileContent(uiState = state, onRetry = { retries++ }) } }
+        composeRule.setContent { EchnoTheme { ProfileContent(uiState = state, onRetry = { retries++ }, account = AccountActions.None) } }
     }
 
     @Test
@@ -70,7 +71,7 @@ class ProfileContentTest {
         show(ProfileUiState.Error(AppError.Network))
 
         composeRule.onNodeWithText("Can't reach Echno. Check your internet connection.").assertIsDisplayed()
-        composeRule.onNodeWithText("Retry").performClick()
+        composeRule.onNodeWithText("Try Again").performClick()
 
         assertEquals(1, retries)
     }

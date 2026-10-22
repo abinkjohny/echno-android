@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,33 +14,42 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.echno.R
+import org.echno.core.designsystem.component.HeaderPillButton
 
 /**
- * The ⋮ menu in a signed-in screen's top bar. Screens don't know about sessions: navigation hands
- * this in through the screen's `topBarActions` slot.
+ * What a signed-in screen can do with the account. Screens don't know about sessions: navigation
+ * hands this in, and each screen shows it as fits its layout (a menu on phones, buttons on tablets).
  */
+data class AccountActions(val canSwitchOrganization: Boolean, val onSwitchOrganization: () -> Unit, val onSignOut: () -> Unit) {
+    companion object {
+        /** For previews and tests. */
+        val None = AccountActions(canSwitchOrganization = false, onSwitchOrganization = {}, onSignOut = {})
+    }
+}
+
+/** The labelled "Account" pill on a header, opening the account menu. */
 @Composable
-fun AccountMenu(canSwitchOrganization: Boolean, onSwitchOrganization: () -> Unit, onSignOut: () -> Unit) {
+fun AccountMenu(actions: AccountActions) {
     var expanded by remember { mutableStateOf(false) }
     Box {
-        IconButton(onClick = { expanded = true }) {
-            Icon(painterResource(R.drawable.ic_more_vert), contentDescription = stringResource(R.string.account_menu))
-        }
+        HeaderPillButton(stringResource(R.string.account_menu), painterResource(R.drawable.ic_account), onClick = { expanded = true })
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            if (canSwitchOrganization) {
+            if (actions.canSwitchOrganization) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.action_switch_organization)) },
+                    text = { Text(stringResource(R.string.action_switch_organization), style = MaterialTheme.typography.bodyLarge) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_organization), contentDescription = null) },
                     onClick = {
                         expanded = false
-                        onSwitchOrganization()
+                        actions.onSwitchOrganization()
                     }
                 )
             }
             DropdownMenuItem(
-                text = { Text(stringResource(R.string.action_sign_out)) },
+                text = { Text(stringResource(R.string.action_sign_out), style = MaterialTheme.typography.bodyLarge) },
+                leadingIcon = { Icon(painterResource(R.drawable.ic_sign_out), contentDescription = null) },
                 onClick = {
                     expanded = false
-                    onSignOut()
+                    actions.onSignOut()
                 }
             )
         }

@@ -100,6 +100,11 @@
         <item quantity="other">%d years</item>
     </plurals>
     <string name="profile_member_since">Member since %1$s</string>
+    <string name="profile_error_title">Couldn\'t load your profile</string>
+    <string name="profile_action_call">Call</string>
+    <string name="profile_action_email">Email</string>
+    <string name="profile_call_description">Call %1$s</string>
+    <string name="profile_email_description">Email %1$s</string>
 
     <!-- Errors (core/ui/AppErrorMessage.kt) -->
     <string name="error_title_default">Something went wrong</string>

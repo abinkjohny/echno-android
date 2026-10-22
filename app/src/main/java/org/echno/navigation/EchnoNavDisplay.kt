@@ -14,7 +14,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.echno.core.auth.SessionState
-import org.echno.core.ui.AccountMenu
+import org.echno.core.ui.AccountActions
 import org.echno.feature.auth.ui.register.RegisterScreen
 import org.echno.feature.auth.ui.welcome.WelcomeNotice
 import org.echno.feature.auth.ui.welcome.WelcomeScreen
@@ -89,7 +89,7 @@ fun EchnoNavDisplay(
             }
             entry<OrganizationPicker> { OrganizationPickerScreen() }
             entry<Profile> {
-                ProfileScreen(topBarActions = { AccountMenu(canSwitchOrganization, onSwitchOrganization, onSignOut) })
+                ProfileScreen(account = AccountActions(canSwitchOrganization, onSwitchOrganization, onSignOut))
             }
         }
     )

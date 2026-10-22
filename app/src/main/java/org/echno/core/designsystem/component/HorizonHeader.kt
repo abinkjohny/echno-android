@@ -67,7 +67,8 @@ fun HorizonHeader(
 
 /**
  * The curve under a header. [sun] adds the amber sun rising behind it; [ground] is the colour of
- * what lies below the curve (the screen's background by default).
+ * what lies below the curve (the screen's background by default). [sunCenterY] is the sun's
+ * centre as a fraction of [height]: lower sets it further behind the horizon.
  */
 @Composable
 fun Horizon(
@@ -75,14 +76,16 @@ fun Horizon(
     modifier: Modifier = Modifier,
     height: Dp = if (sun) 64.dp else 32.dp,
     ground: Color = MaterialTheme.colorScheme.background,
-    sunColor: Color = EchnoTheme.colors.sun
+    sunColor: Color = EchnoTheme.colors.sun,
+    sunRadius: Dp = 38.dp,
+    sunCenterY: Float = 0.94f
 ) {
     // Decorative: Canvas has no semantics, so TalkBack skips it. Clipped, so only the part of the
     // sun above the horizon shows instead of the rest spilling onto what's below.
     Canvas(modifier.fillMaxWidth().height(height).clipToBounds()) {
         val w = size.width
         val h = size.height
-        if (sun) drawCircle(sunColor, radius = 38.dp.toPx(), center = Offset(w * 0.815f, h * 0.94f))
+        if (sun) drawCircle(sunColor, radius = sunRadius.toPx(), center = Offset(w * 0.815f, h * sunCenterY))
         val curve =
             Path().apply {
                 moveTo(0f, h)
