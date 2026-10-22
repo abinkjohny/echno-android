@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.echno.core.designsystem.theme.EchnoTheme
+import org.echno.core.ui.LayoutWidth
 import org.echno.feature.organization.domain.Organization
 import org.echno.feature.organization.ui.OrganizationPickerContent
 import org.echno.feature.organization.ui.OrganizationPickerUiState
@@ -31,7 +32,9 @@ class OrganizationPickerContentTest {
                     uiState = state,
                     onSelect = { selected = it },
                     onRetry = { retries++ },
-                    onSignOut = { signOuts++ }
+                    onSignOut = { signOuts++ },
+                    // Pinned, so the test behaves the same on a phone and a tablet emulator.
+                    layoutWidth = LayoutWidth.Compact
                 )
             }
         }
