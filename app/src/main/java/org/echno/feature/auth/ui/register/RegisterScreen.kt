@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
@@ -265,9 +269,9 @@ private fun RegisterForm(
             .widthIn(max = if (wide) 960.dp else 560.dp)
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            // Keeps the focused field above the keyboard.
-            .imePadding()
-            .then(if (wide) Modifier else Modifier.navigationBarsPadding())
+            // Keeps the focused field above the keyboard. On tablets the bottom bar rises with the
+            // keyboard instead, and the form already ends above the bar.
+            .then(if (wide) Modifier else Modifier.imePadding().navigationBarsPadding())
             .padding(horizontal = if (wide) 40.dp else 20.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -300,10 +304,17 @@ private fun RegisterForm(
     }
 }
 
-/** Tablets: the way back to sign in on the left, Create Account on the right, above a hairline. */
+/**
+ * Tablets: the way back to sign in on the left, Create Account on the right, above a hairline.
+ * Sits above the keyboard while it's open, so Create Account stays reachable while typing. The
+ * union is the larger of the two at each edge: the keyboard already covers the navigation bar.
+ */
 @Composable
 private fun TabletActionBar(uiState: RegisterUiState, onSubmit: () -> Unit, onSignIn: () -> Unit) {
-    Column(Modifier.navigationBarsPadding(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier.windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.ime)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         // As wide as the form above it, so the button lines up with the fields.
         Row(
