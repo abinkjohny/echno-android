@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -76,8 +77,9 @@ fun Horizon(
     ground: Color = MaterialTheme.colorScheme.background,
     sunColor: Color = EchnoTheme.colors.sun
 ) {
-    // Decorative: Canvas has no semantics, so TalkBack skips it.
-    Canvas(modifier.fillMaxWidth().height(height)) {
+    // Decorative: Canvas has no semantics, so TalkBack skips it. Clipped, so only the part of the
+    // sun above the horizon shows instead of the rest spilling onto what's below.
+    Canvas(modifier.fillMaxWidth().height(height).clipToBounds()) {
         val w = size.width
         val h = size.height
         if (sun) drawCircle(sunColor, radius = 38.dp.toPx(), center = Offset(w * 0.815f, h * 0.94f))
@@ -150,6 +152,23 @@ fun PageHeader(
             }
         }
         Horizon(sun = false, height = if (compact) 32.dp else 40.dp, modifier = Modifier.padding(top = 8.dp))
+    }
+}
+
+/** A labelled, outlined pill for actions on the navy header ("Account", "Sign Out"). */
+@Composable
+fun HeaderPillButton(text: String, icon: Painter, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val colors = EchnoTheme.colors
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier.heightIn(min = 44.dp),
+        border = BorderStroke(1.dp, colors.headerOutline),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.onHeader),
+        contentPadding = PaddingValues(start = 10.dp, end = 14.dp)
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(text, style = MaterialTheme.typography.labelMedium)
     }
 }
 

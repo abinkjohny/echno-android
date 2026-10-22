@@ -59,9 +59,9 @@ class OrganizationPickerContentTest {
         show(OrganizationPickerUiState.Loaded(emptyList()))
 
         composeRule.onNodeWithText("You're not in an organization yet").assertIsDisplayed()
-        composeRule.onNodeWithText("Check again").performClick()
-        // Sign out is in the top bar and in the empty state.
-        composeRule.onAllNodesWithText("Sign out")[1].performClick()
+        composeRule.onNodeWithText("Check Again").performClick()
+        // Sign Out is in the header and in the empty state.
+        composeRule.onAllNodesWithText("Sign Out")[1].performClick()
 
         assertEquals(1, retries)
         assertEquals(1, signOuts)
