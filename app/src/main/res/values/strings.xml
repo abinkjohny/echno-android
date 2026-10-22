@@ -69,14 +69,15 @@
 
     <!-- Organizations and account -->
     <string name="organization_picker_title">Choose organization</string>
-    <string name="organization_picker_message">You belong to more than one organization. Choose the one to work in; you can switch later from the ⋮ menu.</string>
+    <string name="organization_picker_message">You belong to more than one organization. Choose the one to work in; you can switch later from the Account menu.</string>
+    <string name="organization_error_title">Couldn\'t load your organizations</string>
     <string name="organization_inactive">Inactive</string>
     <string name="organization_none_title">You\'re not in an organization yet</string>
     <string name="organization_none_message">Ask your company\'s Echno admin to add you. Once they have, check again.</string>
-    <string name="organization_check_again">Check again</string>
+    <string name="organization_check_again">Check Again</string>
     <string name="account_menu">Account</string>
-    <string name="action_switch_organization">Switch organization</string>
-    <string name="action_sign_out">Sign out</string>
+    <string name="action_switch_organization">Switch Organization</string>
+    <string name="action_sign_out">Sign Out</string>
 
     <!-- Profile -->
     <string name="profile_title">Profile</string>
