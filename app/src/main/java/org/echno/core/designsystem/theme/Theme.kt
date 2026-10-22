@@ -75,7 +75,8 @@ private val DarkColorScheme =
 
 /**
  * Brand colours Material has no role for: the navy header band at the top of main screens and
- * what sits on it, the low sun, amber used as text, and the hairline between rows in a card.
+ * what sits on it, the low sun, amber used as text, the hairline between rows in a card, and
+ * the initials disc on the header.
  */
 @Immutable
 data class EchnoColors(
@@ -86,7 +87,9 @@ data class EchnoColors(
     val headerOutline: Color,
     val sun: Color,
     val amberText: Color,
-    val cardRule: Color
+    val cardRule: Color,
+    val avatar: Color,
+    val onAvatar: Color
 )
 
 private val LightEchnoColors =
@@ -98,7 +101,9 @@ private val LightEchnoColors =
         headerOutline = HeaderOutline,
         sun = DuskAmber,
         amberText = AmberText,
-        cardRule = PaperTrack
+        cardRule = PaperTrack,
+        avatar = DrawingPaper,
+        onAvatar = EchnoNavy
     )
 
 private val DarkEchnoColors =
@@ -110,7 +115,9 @@ private val DarkEchnoColors =
         headerOutline = HeaderOutline,
         sun = NightAmber,
         amberText = NightAmber,
-        cardRule = NightRule
+        cardRule = NightRule,
+        avatar = NightInk,
+        onAvatar = EchnoNavy
     )
 
 private val LocalEchnoColors = staticCompositionLocalOf { LightEchnoColors }
