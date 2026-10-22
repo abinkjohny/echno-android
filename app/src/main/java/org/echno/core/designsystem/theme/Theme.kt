@@ -1,57 +1,140 @@
 package org.echno.core.designsystem.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+// How the Material roles map onto the brand: primary = navy (links, secondary buttons),
+// secondary = amber (the one main action per screen), tertiary = green (done, on track),
+// surface = paper, surfaceContainerLowest = the white cards on it.
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-     */
-)
-
-@Composable
-fun EchnoTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+private val LightColorScheme =
+    lightColorScheme(
+        primary = EchnoNavy,
+        onPrimary = Color.White,
+        primaryContainer = NavyTint,
+        onPrimaryContainer = EchnoNavy,
+        secondary = DuskAmber,
+        onSecondary = SiteInk,
+        secondaryContainer = AmberTint,
+        onSecondaryContainer = AmberText,
+        tertiary = SiteGreen,
+        onTertiary = Color.White,
+        background = DrawingPaper,
+        onBackground = SiteInk,
+        surface = DrawingPaper,
+        onSurface = SiteInk,
+        surfaceVariant = PaperTrack,
+        onSurfaceVariant = InkMuted,
+        surfaceContainerLowest = PaperCard,
+        surfaceContainerLow = PaperCard,
+        surfaceContainer = PaperCard,
+        surfaceContainerHigh = PaperCard,
+        surfaceContainerHighest = PaperTrack,
+        outline = FieldOutline,
+        outlineVariant = PaperRule,
+        error = SiteRed,
+        onError = Color.White
     )
+
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = NightLink,
+        onPrimary = NightSky,
+        primaryContainer = NightNavyTint,
+        onPrimaryContainer = NightOnNavyTint,
+        secondary = NightAmber,
+        onSecondary = SiteInk,
+        secondaryContainer = NightAmberTint,
+        onSecondaryContainer = NightAmber,
+        tertiary = NightGreen,
+        onTertiary = NightSky,
+        background = NightSky,
+        onBackground = NightInk,
+        surface = NightSky,
+        onSurface = NightInk,
+        surfaceVariant = NightTrack,
+        onSurfaceVariant = NightInkMuted,
+        surfaceContainerLowest = NightSurface,
+        surfaceContainerLow = NightSurface,
+        surfaceContainer = NightSurface,
+        surfaceContainerHigh = NightTrack,
+        surfaceContainerHighest = NightTrack,
+        outline = NightOutline,
+        outlineVariant = NightRule,
+        error = NightRed,
+        onError = NightSky
+    )
+
+/**
+ * Brand colours Material has no role for: the navy header band at the top of main screens and
+ * what sits on it, the low sun, amber used as text, and the hairline between rows in a card.
+ */
+@Immutable
+data class EchnoColors(
+    val header: Color,
+    val onHeader: Color,
+    val onHeaderMuted: Color,
+    val headerChip: Color,
+    val headerOutline: Color,
+    val sun: Color,
+    val amberText: Color,
+    val cardRule: Color
+)
+
+private val LightEchnoColors =
+    EchnoColors(
+        header = EchnoNavy,
+        onHeader = Color.White,
+        onHeaderMuted = OnHeaderMuted,
+        headerChip = HeaderChip,
+        headerOutline = HeaderOutline,
+        sun = DuskAmber,
+        amberText = AmberText,
+        cardRule = PaperTrack
+    )
+
+private val DarkEchnoColors =
+    EchnoColors(
+        header = NightNavy,
+        onHeader = Color.White,
+        onHeaderMuted = OnHeaderMuted,
+        headerChip = NightHeaderChip,
+        headerOutline = HeaderOutline,
+        sun = NightAmber,
+        amberText = NightAmber,
+        cardRule = NightRule
+    )
+
+private val LocalEchnoColors = staticCompositionLocalOf { LightEchnoColors }
+
+/** Read the brand colours as `EchnoTheme.colors.header`, next to `MaterialTheme.colorScheme`. */
+object EchnoTheme {
+    val colors: EchnoColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalEchnoColors.current
+}
+
+/**
+ * The app theme. Android 12+'s wallpaper-based dynamic colour is deliberately not used: the
+ * brand colours carry meaning (amber = the main action), which a wallpaper palette would lose.
+ */
+@Composable
+fun EchnoTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalEchnoColors provides if (darkTheme) DarkEchnoColors else LightEchnoColors) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }
