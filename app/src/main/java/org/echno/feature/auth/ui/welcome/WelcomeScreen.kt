@@ -133,7 +133,14 @@ private fun WideWelcome(uiState: WelcomeUiState, notice: WelcomeNotice?, onSignI
                     )
                 )
             )
-            Column(Modifier.safeDrawingPadding().padding(horizontal = 64.dp, vertical = 56.dp)) {
+            // Scrolls like the right pane, for a short window or enlarged text.
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .safeDrawingPadding()
+                    .padding(horizontal = 64.dp, vertical = 56.dp)
+            ) {
                 BrandMark(tile = 52.dp)
                 Spacer(Modifier.height(96.dp))
                 Headline(MaterialTheme.typography.displayLarge)
