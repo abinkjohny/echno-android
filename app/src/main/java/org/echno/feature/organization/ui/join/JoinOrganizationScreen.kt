@@ -141,6 +141,7 @@ private fun Message(uiState: JoinOrganizationUiState) {
 /** What went wrong, in terms of the code: the shared sentences talk about records, not codes. */
 @Composable
 private fun joinErrorMessage(error: AppError, joined: Organization?): String = when {
+    joined != null && error is AppError.Forbidden -> stringResource(R.string.join_joined_not_yet, joined.name)
     joined != null -> stringResource(R.string.join_joined_offline, joined.name)
     error is AppError.NotFound -> stringResource(R.string.join_error_not_found)
     error is AppError.Validation -> stringResource(R.string.join_error_invalid)

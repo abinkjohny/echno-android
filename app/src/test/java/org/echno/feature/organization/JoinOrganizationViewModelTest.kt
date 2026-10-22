@@ -110,6 +110,29 @@ class JoinOrganizationViewModelTest {
         assertEquals(listOf("04821"), repository.codes)
         assertEquals(SessionState.SignedIn(7), session.state.value)
     }
+
+    @Test
+    fun `a new token that doesn't list the organization yet keeps you on the page`() = runTest {
+        repository.result = ApiResult.Success(tornotron)
+        tokenService.refreshResult = TokenResult.Success(tokens(accessTokenWithGroups("/org-3")))
+        val viewModel = viewModel()
+        viewModel.onCodeChange("04821")
+
+        viewModel.join()
+        advanceUntilIdle()
+
+        // Selecting it now would send an X-Organization-Id the backend refuses.
+        assertEquals(SessionState.SignedIn(null), session.state.value)
+        assertEquals(tornotron, viewModel.uiState.value.joined)
+        assertTrue(viewModel.uiState.value.error is AppError.Forbidden)
+
+        tokenService.refreshResult = TokenResult.Success(tokens(accessTokenWithGroups("/org-3", "/org-7")))
+        viewModel.join()
+        advanceUntilIdle()
+
+        assertEquals(listOf("04821"), repository.codes)
+        assertEquals(SessionState.SignedIn(7), session.state.value)
+    }
 }
 
 private class FakeJoinRepository : OrganizationRepository {

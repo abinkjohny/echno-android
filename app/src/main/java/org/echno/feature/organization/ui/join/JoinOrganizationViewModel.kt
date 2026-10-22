@@ -23,8 +23,9 @@ data class JoinOrganizationUiState(
     val isJoining: Boolean = false,
     val error: AppError? = null,
     /**
-     * Set when the server has added the user but the session couldn't pick the membership up
-     * (offline right after joining). The code is spent; only the token refresh is left to retry.
+     * Set when the server has added the user but the session hasn't picked the membership up:
+     * the token couldn't be refreshed ([error] is Network), or the new token doesn't list the
+     * organization yet ([error] is Forbidden). The code is spent; only the refresh is retried.
      */
     val joined: Organization? = null
 ) {
@@ -65,11 +66,17 @@ class JoinOrganizationViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Selects [organization] only once the token lists it: the backend reads membership from the
+     * token, so selecting it any earlier would send an `X-Organization-Id` it refuses.
+     */
     private suspend fun enter(organization: Organization) {
-        if (sessionManager.refreshMemberships()) {
+        val refreshed = sessionManager.refreshMemberships()
+        if (refreshed && organization.id in sessionManager.memberOrganizationIds()) {
             sessionManager.selectOrganization(organization.id)
         } else {
-            _uiState.update { it.copy(isJoining = false, joined = organization, error = AppError.Network) }
+            val error = if (refreshed) AppError.Forbidden(detail = null) else AppError.Network
+            _uiState.update { it.copy(isJoining = false, joined = organization, error = error) }
         }
     }
 }
