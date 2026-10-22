@@ -44,7 +44,9 @@ import org.echno.core.designsystem.component.OutlineButton
 import org.echno.core.designsystem.component.SiteTag
 import org.echno.core.designsystem.theme.EchnoTheme
 import org.echno.core.network.AppError
+import org.echno.core.ui.LayoutWidth
 import org.echno.core.ui.TabletPreviews
+import org.echno.core.ui.currentLayoutWidth
 import org.echno.core.ui.messageRes
 import org.echno.feature.organization.domain.Organization
 
@@ -61,8 +63,8 @@ fun OrganizationPickerScreen(modifier: Modifier = Modifier, viewModel: Organizat
 }
 
 /**
- * The same layout on phones and tablets: organizations are cards in a grid that is one column
- * wide on a phone and fills with more columns as the window widens.
+ * Organizations are cards in a grid: one column on phones and tablets held upright (the phone
+ * layout, capped in width), three on a tablet on its side.
  */
 @Composable
 fun OrganizationPickerContent(
@@ -70,7 +72,8 @@ fun OrganizationPickerContent(
     onSelect: (Long) -> Unit,
     onRetry: () -> Unit,
     onSignOut: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    layoutWidth: LayoutWidth = currentLayoutWidth()
 ) {
     Surface(modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column {
@@ -97,7 +100,7 @@ fun OrganizationPickerContent(
                         if (uiState.organizations.isEmpty()) {
                             NoOrganization(onRetry, onSignOut)
                         } else {
-                            OrganizationGrid(uiState.organizations, onSelect)
+                            OrganizationGrid(uiState.organizations, onSelect, wide = layoutWidth == LayoutWidth.Expanded)
                         }
                 }
             }
@@ -106,11 +109,13 @@ fun OrganizationPickerContent(
 }
 
 @Composable
-private fun OrganizationGrid(organizations: List<Organization>, onSelect: (Long) -> Unit) {
+private fun OrganizationGrid(organizations: List<Organization>, onSelect: (Long) -> Unit, wide: Boolean) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 320.dp),
-            modifier = Modifier.widthIn(max = 1040.dp).fillMaxSize(),
+            // A fixed count, not "as many as fit": the column count follows the layout, so an
+            // upright tablet keeps the phone's single column and a landscape one always gets three.
+            columns = GridCells.Fixed(if (wide) 3 else 1),
+            modifier = Modifier.widthIn(max = if (wide) 1040.dp else 640.dp).fillMaxSize(),
             contentPadding = PaddingValues(start = 20.dp, top = 4.dp, end = 20.dp, bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -225,6 +230,12 @@ private fun OrganizationPickerErrorPreview() {
 @Composable
 private fun OrganizationPickerTabletPreview() {
     EchnoTheme {
-        OrganizationPickerContent(OrganizationPickerUiState.Loaded(previewOrganizations), onSelect = {}, onRetry = {}, onSignOut = {})
+        OrganizationPickerContent(
+            OrganizationPickerUiState.Loaded(previewOrganizations),
+            onSelect = {},
+            onRetry = {},
+            onSignOut = {},
+            layoutWidth = LayoutWidth.Expanded
+        )
     }
 }
