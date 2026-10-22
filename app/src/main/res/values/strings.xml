@@ -68,7 +68,7 @@
     <string name="field_error_rejected">The server didn\'t accept this value</string>
 
     <!-- Organizations and account -->
-    <string name="organization_picker_title">Choose organization</string>
+    <string name="organization_picker_title">Choose Organization</string>
     <string name="organization_picker_message">You belong to more than one organization. Choose the one to work in; you can switch later from the Account menu.</string>
     <string name="organization_error_title">Couldn\'t load your organizations</string>
     <string name="organization_inactive">Inactive</string>
@@ -77,9 +77,9 @@
     <string name="action_join_organization">Join Organization</string>
 
     <!-- Join an organization with an invitation code -->
-    <string name="join_title">Join organization</string>
+    <string name="join_title">Join Organization</string>
     <string name="join_intro">Enter the 5-digit invitation code your company\'s Echno admin gave you.</string>
-    <string name="join_code_label">Invitation code</string>
+    <string name="join_code_label">Invitation Code</string>
     <string name="join_hint">If the code doesn\'t work, ask your admin for a new one: codes expire and can only be used a set number of times.</string>
     <string name="action_join">Join</string>
     <string name="action_continue">Continue</string>
@@ -101,20 +101,20 @@
     <string name="profile_section_work">Work</string>
     <string name="profile_label_email">Email</string>
     <string name="profile_label_phone">Phone</string>
-    <string name="profile_label_emergency_contact">Emergency contact</string>
+    <string name="profile_label_emergency_contact">Emergency Contact</string>
     <string name="profile_label_address">Address</string>
     <string name="profile_label_gender">Gender</string>
-    <string name="profile_label_date_of_birth">Date of birth</string>
-    <string name="profile_label_blood_group">Blood group</string>
+    <string name="profile_label_date_of_birth">Date of Birth</string>
+    <string name="profile_label_blood_group">Blood Group</string>
     <string name="profile_label_qualification">Qualification</string>
     <string name="profile_label_experience">Experience</string>
     <string name="profile_label_skills">Skills</string>
     <string name="profile_label_certifications">Certifications</string>
     <plurals name="profile_experience_years">
-        <item quantity="one">%d year</item>
-        <item quantity="other">%d years</item>
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
     </plurals>
-    <string name="profile_member_since">Member since %1$s</string>
+    <string name="profile_member_since">Member Since %1$s</string>
     <string name="profile_error_title">Couldn\'t load your profile</string>
     <string name="profile_action_call">Call</string>
     <string name="profile_action_email">Email</string>

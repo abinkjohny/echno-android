@@ -68,7 +68,7 @@ class ProfileContentTest {
         composeRule.onNodeWithText("HR Manager").assertIsDisplayed()
         composeRule.onNodeWithText("Malabar Builders").assertIsDisplayed()
         composeRule.onNodeWithText("asha@example.com").assertIsDisplayed()
-        composeRule.onNodeWithText("1 year").performScrollTo().assertIsDisplayed()
+        composeRule.onNodeWithText("1 Year").performScrollTo().assertIsDisplayed()
         composeRule.onNodeWithText("Payroll").performScrollTo().assertIsDisplayed()
         // Nothing personal is filled in, so that card isn't shown at all.
         composeRule.onNodeWithText("Personal").assertDoesNotExist()

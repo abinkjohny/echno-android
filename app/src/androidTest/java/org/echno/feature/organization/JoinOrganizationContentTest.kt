@@ -48,7 +48,7 @@ class JoinOrganizationContentTest {
         }
     }
 
-    private val codeField get() = composeRule.onNode(hasSetTextAction() and hasContentDescription("Invitation code"))
+    private val codeField get() = composeRule.onNode(hasSetTextAction() and hasContentDescription("Invitation Code"))
 
     @Test
     fun typing_keepsDigitsOnly_andAtMostFive() {
