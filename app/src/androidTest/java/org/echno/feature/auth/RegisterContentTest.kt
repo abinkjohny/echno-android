@@ -16,6 +16,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.echno.core.designsystem.theme.EchnoTheme
+import org.echno.core.ui.LayoutWidth
 import org.echno.feature.auth.domain.AccountRole
 import org.echno.feature.auth.domain.FieldError
 import org.echno.feature.auth.domain.Gender
@@ -37,7 +38,8 @@ class RegisterContentTest {
     private var state by mutableStateOf(RegisterUiState())
     private var submits = 0
 
-    private fun show(initial: RegisterUiState = RegisterUiState()) {
+    // The layout is pinned, so the tests behave the same on a phone and a tablet emulator.
+    private fun show(initial: RegisterUiState = RegisterUiState(), layoutWidth: LayoutWidth = LayoutWidth.Compact) {
         state = initial
         composeRule.setContent {
             EchnoTheme {
@@ -46,7 +48,8 @@ class RegisterContentTest {
                     onFormChange = { state = state.copy(form = it) },
                     onSubmit = { submits++ },
                     onSubmitErrorShown = {},
-                    onBack = {}
+                    onBack = {},
+                    layoutWidth = layoutWidth
                 )
             }
         }
@@ -100,6 +103,16 @@ class RegisterContentTest {
 
         // The title also reads "Create Account"; the button is the one that can be clicked.
         composeRule.onNode(hasText("Create Account") and hasClickAction()).performScrollTo().performClick()
+
+        assertEquals(1, submits)
+    }
+
+    @Test
+    fun onATablet_createAccountInTheBottomBar_submits() {
+        show(layoutWidth = LayoutWidth.Expanded)
+
+        // The bar stays put below the scrolling fields, so no scrolling is needed to reach it.
+        composeRule.onNode(hasText("Create Account") and hasClickAction()).performClick()
 
         assertEquals(1, submits)
     }
