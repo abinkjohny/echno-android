@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -47,7 +48,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.time.LocalDate
@@ -256,10 +256,9 @@ private fun Identity(profile: Profile, avatarSize: Dp, horizontal: Boolean) {
                     initials(profile.name),
                     fontFamily = Bricolage,
                     fontWeight = MaterialTheme.typography.headlineMedium.fontWeight,
-                    fontSize = (
-                        avatarSize.value *
-                            0.39f
-                        ).sp
+                    // Sized from the circle in dp, not in sp: the initials are part of the avatar, so they
+                    // keep to it at any text size (the name beside it is what grows).
+                    fontSize = with(LocalDensity.current) { (avatarSize * 0.39f).toSp() }
                 )
             }
         }
