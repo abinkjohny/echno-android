@@ -31,8 +31,8 @@ org.echno
 │   ├── network/         Retrofit and OkHttp setup, interceptors, ApiResult, AppError, safeApiCall
 │   ├── session/         SelectedOrganization, the organization the user works in
 │   ├── coroutines/      the application-wide CoroutineScope
-│   ├── designsystem/    theme (colors, type) and shared components (loading, empty, error states)
-│   └── ui/              shared UI pieces: the account menu, an error message for each AppError
+│   ├── designsystem/    theme (colours, fonts, type, shapes) and shared components (buttons, headers, cards, fields, states)
+│   └── ui/              shared UI pieces: the account menu, LayoutWidth, Call/Email intents, an error message for each AppError
 └── feature/<name>/
     ├── data/            <Name>Api (Retrofit), dto/ (wire format), <Name>Repository, <Name>DataModule (Hilt)
     ├── domain/          the models the UI works with
@@ -120,6 +120,28 @@ When the session changes (sign-in, sign-out, an expired session), the whole stac
 Back can never return to a screen from the previous session. Other screens are pushed on top with
 `backStack.add(route)`. Each entry gets its own ViewModels, cleared when it is popped.
 
+## Design system and screen sizes
+
+Screens are built from the theme and the components in `core/designsystem`, never from raw colours
+or sizes:
+
+- **Colours** are read by role: `MaterialTheme.colorScheme.secondary` is the amber main action,
+  `surfaceContainerLowest` a card. Brand colours Material has no role for (the header band, the sun)
+  are in `EchnoTheme.colors`. Light and dark are both defined, so screens need no dark-mode code.
+  Wallpaper-based dynamic colour is not used.
+- **Type** is Bricolage Grotesque for headings and Atkinson Hyperlegible Next for the rest, both
+  bundled under the SIL Open Font License (`assets/licenses/`). Body text is 17sp and nothing is
+  smaller than 14sp.
+- **Components** cover what the designs repeat: `PrimaryButton` (one per screen), `HorizonHeader`,
+  `PageHeader`, `SectionHeader`, `DetailCard`, `SiteTag`, `FormField`, `ChoiceTrack` and the
+  loading, empty and error states.
+
+A screen picks its layout from the **window width**, not from the device type. `currentLayoutWidth()`
+returns `Compact` (under 600dp), `Medium` (600–840dp) or `Expanded` (840dp and up). Compact and
+Medium use the phone layout, capped in width; Expanded gets the tablet layout. Each `…Content`
+composable takes `layoutWidth` as a parameter defaulting to the real window, so previews
+(`@TabletPreviews`) and tests can choose one.
+
 ## Build variants and configuration
 
 The `environment` flavor dimension has `dev`, `staging` and `prod`, each with its own application id,
@@ -133,7 +155,7 @@ security config is generated from the configured hosts.
 |---|---|---|
 | Repository | MockWebServer serves recorded JSON; assert the domain result and the request sent | `DefaultProfileRepositoryTest` |
 | ViewModel | A fake repository and `MainDispatcherRule`; assert the `UiState` sequence | `ProfileViewModelTest` |
-| Screen | `createComposeRule()` on the stateless `…Content`; find nodes by text and click | `ProfileContentTest` |
+| Screen | `createComposeRule()` on the stateless `…Content` with a fixed `layoutWidth`; find nodes by text and click | `ProfileContentTest` |
 | Auth and network core | Fakes for the token service and the store | `SessionManagerTest`, `TokenAuthenticatorTest` |
 
 ## Adding a feature
