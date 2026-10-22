@@ -1,0 +1,23 @@
+<!-- A tower crane with a low sun, drawn in line like a site sheet: the picture on empty states.
+     Decorative. Colours come from colors.xml, so the night variants apply in dark mode. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="76dp"
+    android:viewportWidth="120"
+    android:viewportHeight="76">
+    <path
+        android:fillColor="@color/illustration_accent"
+        android:pathData="M98,64m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    <path
+        android:pathData="M4,72h112M30,72V14M24,72l6,-58 6,58M30,14h70M30,20h62M36,14l-6,6M48,14l-6,6M60,14l-6,6M72,14l-6,6M84,14l-6,6M86,20v18"
+        android:strokeWidth="2"
+        android:strokeColor="@color/illustration_line"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="@color/illustration_accent"
+        android:pathData="M80,38h12v8h-12z"
+        android:strokeWidth="2"
+        android:strokeColor="@color/illustration_line"
+        android:strokeLineJoin="round" />
+</vector>

@@ -2,4 +2,7 @@
 <resources>
     <!-- Top colour of splash_background, so the system splash hands over without a flash. -->
     <color name="splash_background">#FFF1F8FE</color>
+    <!-- The line drawing on empty states (drawable/illustration_crane.xml). -->
+    <color name="illustration_line">#FF183867</color>
+    <color name="illustration_accent">#FFE8A33D</color>
 </resources>
