@@ -90,6 +90,7 @@
         <item quantity="other">Too many tries. Try again in %1$d minutes.</item>
     </plurals>
     <string name="join_joined_offline">You\'ve joined %1$s. Check your internet connection, then tap Continue.</string>
+    <string name="join_joined_not_yet">You\'ve joined %1$s, but your sign-in doesn\'t show it yet. Wait a moment, then tap Continue.</string>
     <string name="account_menu">Account</string>
     <string name="action_switch_organization">Switch Organization</string>
     <string name="action_sign_out">Sign Out</string>
