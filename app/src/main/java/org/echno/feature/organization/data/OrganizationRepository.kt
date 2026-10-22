@@ -4,6 +4,7 @@ import javax.inject.Inject
 import org.echno.core.network.ApiResult
 import org.echno.core.network.map
 import org.echno.core.network.safeApiCall
+import org.echno.feature.organization.data.dto.InviteCodeRequestDto
 import org.echno.feature.organization.data.dto.OrganizationDto
 import org.echno.feature.organization.domain.Organization
 
@@ -15,6 +16,9 @@ interface OrganizationRepository {
      * when the user belongs to at most one organization.
      */
     suspend fun getMyOrganizations(memberOf: List<Long>): ApiResult<List<Organization>>
+
+    /** Joins the organization an invitation [code] belongs to, and returns it. [memberOf] as above. */
+    suspend fun joinWithInviteCode(code: String, memberOf: List<Long>): ApiResult<Organization>
 }
 
 class DefaultOrganizationRepository @Inject constructor(private val api: OrganizationApi) : OrganizationRepository {
@@ -24,6 +28,14 @@ class DefaultOrganizationRepository @Inject constructor(private val api: Organiz
             val user = api.getCurrentUser(scope)
             api.getOrganizations(user.id, scope)
         }.map { organizations -> organizations.map { it.toDomain() }.sortedBy { it.name.lowercase() } }
+    }
+
+    override suspend fun joinWithInviteCode(code: String, memberOf: List<Long>): ApiResult<Organization> {
+        val scope = memberOf.firstOrNull()
+        return safeApiCall {
+            val user = api.getCurrentUser(scope)
+            api.redeemInviteCode(user.id, InviteCodeRequestDto(code), scope)
+        }.map { it.toDomain() }
     }
 }
 

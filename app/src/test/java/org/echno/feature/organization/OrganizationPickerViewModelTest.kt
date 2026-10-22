@@ -127,4 +127,6 @@ private class FakeOrganizationRepository : OrganizationRepository {
         requests += memberOf
         return result
     }
+
+    override suspend fun joinWithInviteCode(code: String, memberOf: List<Long>): ApiResult<Organization> = error("not used here")
 }

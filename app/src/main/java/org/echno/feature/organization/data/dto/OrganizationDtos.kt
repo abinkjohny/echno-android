@@ -14,3 +14,7 @@ data class OrganizationDto(
     val organizationAddress: String? = null,
     val isActive: Boolean? = null
 )
+
+/** `POST /api/v1/invitation/web/validate/userId/{userId}`: the invitation code to redeem (5 digits). */
+@Serializable
+data class InviteCodeRequestDto(val code: String)

@@ -9,7 +9,9 @@ import kotlinx.coroutines.test.runTest
 import org.echno.core.network.AppError
 import org.echno.core.session.SelectedOrganization
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SessionManagerTest {
@@ -70,6 +72,27 @@ class SessionManagerTest {
         assertEquals("new", manager.accessToken())
         assertEquals(listOf("refresh-old"), tokenService.refreshedWith)
         assertEquals("new", store.stored.tokens?.accessToken)
+    }
+
+    @Test
+    fun `refreshing memberships gets a new token even though the current one is still valid`() = runTest {
+        val store = FakeSessionStore(StoredSession(tokens("a1"), null))
+        tokenService.refreshResult = TokenResult.Success(tokens("a2"))
+        val manager = manager(store)
+
+        assertTrue(manager.refreshMemberships())
+        assertEquals("a2", manager.accessToken())
+        assertEquals("a2", store.stored.tokens?.accessToken)
+    }
+
+    @Test
+    fun `refreshing memberships offline keeps the session and says so`() = runTest {
+        tokenService.refreshResult = TokenResult.Failed(AppError.Network)
+        val manager = manager(FakeSessionStore(StoredSession(tokens("a1"), null)))
+
+        assertFalse(manager.refreshMemberships())
+        assertEquals(SessionState.SignedIn(null), manager.state.value)
+        assertEquals("a1", manager.accessToken())
     }
 
     @Test
