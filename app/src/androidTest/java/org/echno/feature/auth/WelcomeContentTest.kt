@@ -35,7 +35,7 @@ class WelcomeContentTest {
     fun buttons_reachTheirCallbacks() {
         show()
 
-        composeRule.onNodeWithText("Sign in").performClick()
+        composeRule.onNodeWithText("Sign In").performClick()
         composeRule.onNodeWithText("Create Account").performClick()
 
         assertEquals(1, signIns)

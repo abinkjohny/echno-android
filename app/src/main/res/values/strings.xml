@@ -10,10 +10,12 @@
     <string name="action_back">Back</string>
 
     <!-- Sign in -->
-    <string name="welcome_title">Welcome to Echno</string>
+    <string name="welcome_title">Welcome</string>
+    <string name="welcome_headline">Every site,\nin your hand.</string>
+    <string name="welcome_secure_note">You\'ll sign in on Echno\'s secure page.</string>
     <string name="welcome_message">Sign in with your Echno account to see your projects.</string>
     <string name="welcome_account_created">Account created for %1$s. Sign In to Continue.</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in">Sign In</string>
     <string name="sign_in_error_no_browser">Signing in needs a web browser. Install or turn on a browser, then try again.</string>
 
     <!-- Register -->
